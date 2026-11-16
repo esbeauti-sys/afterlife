@@ -88,8 +88,9 @@
         <svg class="chev" viewBox="0 0 9 15"><path d="M2 2l5 5.5L2 13" fill="none" stroke="#AF9083" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
 
-      <button class="rough btn save" id="save">저장하기</button>
+      <div style="height:110px"></div>
     </div>
+    <div class="fix-foot nb"><button class="rough btn" id="save">저장하기</button></div>
   </section>
 
   <!-- 6. Customizer -->
@@ -120,9 +121,9 @@
       <svg class="waves" viewBox="0 0 402 120" preserveAspectRatio="none"><g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path class="w w1" d="M30 30 q14 -6 28 0"/><path class="w w2" d="M320 50 q14 -6 28 0"/><path class="w w3" d="M90 80 q14 -6 28 0"/><path class="w w4" d="M250 100 q14 -6 28 0"/><path class="w w5" d="M180 40 q12 -5 24 0"/></g></svg>
     </div>
     <div class="isles" id="isles">
+      <div class="slide" id="commSlide"><button class="isl-btn" id="toComm">함께 기억하는 섬</button><p class="sw-hint">‹ 옆으로 넘기면 커뮤니티로 이동해요</p><div class="isle"><img class="iimg i3" src="/img/isl3.png" alt="돌탑 언덕"></div></div>
       <div class="slide"><div class="isle" id="isle"><img class="iimg" src="/img/isl1.png" alt="추모 섬"></div></div>
       <div class="slide" id="houseSlide"><button class="isl-btn store-btn">기억을 저장하는 섬</button><div class="isle"><img class="iimg i2" src="/img/isl2.png" alt="기억의 집"><div class="house-hit"><i class="sp s1"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i><i class="sp s2"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i><i class="sp s3"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i><i class="sp s4"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i><span class="glow"></span></div></div><div class="rough hint">집을 터치해서 안으로 들어가보세요.<br>그동안 저장한 사진과 글을 볼 수 있어요.</div></div>
-      <div class="slide" id="commSlide"><button class="isl-btn" id="toComm">함께 기억하는 섬</button><div class="isle"><img class="iimg i3" src="/img/isl3.png" alt="돌탑 언덕"></div></div>
     </div>
     
     <button class="add-pill" id="addPet"><span>+</span> 아이 추가</button>
@@ -246,9 +247,9 @@
         <div class="tabs" id="pcTabs"></div>
         <div class="pc-panel" id="pcPanel"></div>
       </div>
-      <button class="rough btn save" id="pfSave">저장하기</button>
-      <div style="height:110px"></div>
+      <div style="height:200px"></div>
     </div>
+    <div class="fix-foot"><button class="rough btn" id="pfSave">저장하기</button></div>
     <nav class="tabbar"></nav>
   </section>
 
@@ -256,6 +257,7 @@
   <section class="screen" id="settings">
     <button class="back" data-tabhome><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button>
     <div class="scroll st-body" id="stBody"></div>
+    <div class="fix-foot st-ff"><button class="rough btn" id="stSave">저장하기</button></div>
     <div class="st-modal" id="stModal"><div class="rough st-box"><p id="stMsg"></p><div class="st-mb"><button class="chip" id="stNo">취소</button><button class="chip danger" id="stYes">지우기</button></div></div></div>
     <nav class="tabbar"></nav>
   </section>
@@ -285,9 +287,9 @@
       <label class="rough field"><input id="lvNick" maxlength="12" placeholder="예: 콩이맘, 보리 언니" autocomplete="off"></label>
       <div class="q"><span>2.</span>남기고 싶은 메시지를 작성해 주세요.</div>
       <label class="rough field"><textarea id="lvMsg" maxlength="200" placeholder="예:&#10;산책 가자고 하면 하네스를 물고 오던 아이예요"></textarea></label>
-      <button class="rough btn save" id="lvSave">저장하기</button>
-      <div style="height:30px"></div>
+      <div style="height:110px"></div>
     </div>
+    <div class="fix-foot nb"><button class="rough btn" id="lvSave">저장하기</button></div>
   </section>
 
   <!-- 19. 오늘의 쪽지 (감정 다이어리 + AI) -->
