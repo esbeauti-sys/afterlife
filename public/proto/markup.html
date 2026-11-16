@@ -1,0 +1,398 @@
+
+<svg width="0" height="0" style="position:absolute">
+  <filter id="rough" x="-5%" y="-10%" width="110%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<div class="app" id="app">
+
+  <!-- 1. Splash -->
+  <section class="screen on" id="splash" data-go="login">
+    <img class="splash-img" src="/img/splash.jpg" alt="AFTER LIFE">
+    <div class="tap-hint">화면을 눌러 시작하기</div>
+  </section>
+
+  <!-- 2. Login sheet -->
+  <section class="screen" id="login">
+    <div class="sheet">
+      <div class="handle"></div>
+      <p class="copy">우리 아이의 사진을<br>다시 만나고, 마음을 기록해요.</p>
+      <p class="copy">구글 계정으로 로그인하여 계정을 만들어보세요.</p>
+      <div class="dog-wrap"><img src="/img/dog.webp" alt="강아지 캐릭터"></div>
+      <button class="rough btn" id="google">
+        <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2c-2 1.5-4.5 2.4-7.2 2.4-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>
+        Google로 시작하기
+      </button>
+      <button class="link" id="guest">로그인 없이 먼저 둘러볼게요.</button>
+    </div>
+  </section>
+
+  <!-- 3. Gallery connect -->
+  <section class="screen" id="gallery">
+    <button class="back" data-back><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button>
+    <p class="copy" id="welcome">환영합니다. <span class="name-hl">하루</span> 보호자님.</p>
+    <p class="copy">갤러리를 연동해서 휴대폰의 사진을 불러와 보세요.<br>불러온 사진은 앱 내에서 정리하거나<br>그리운 감정을 위로받을 수 있어요.</p>
+    <div class="illu"><img src="/img/guardian.png" alt=""></div>
+    <label class="rough btn" for="picker">
+      <svg viewBox="0 0 24 24"><rect x="2.5" y="3.5" width="19" height="17" rx="3.5" fill="#4A423C"/><circle cx="8.5" cy="9" r="2" fill="#FAF6F0"/><path d="M4.5 18 10 12.5l3.5 3.5 2.5-2.5 3.5 3.5z" fill="#FAF6F0"/></svg>
+      갤러리 연동하기
+    </label>
+    <input type="file" id="picker" accept="image/*" multiple hidden>
+    <button class="link" id="skipGal">갤러리 연동하지 않고 넘어갈게요.</button>
+  </section>
+
+  <!-- 4. Gallery done -->
+  <section class="screen" id="gallery-done">
+    <button class="back" data-back><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button>
+    <p class="copy">갤러리 연동이 완료됐습니다.</p>
+    <p class="copy">이제 우리 아이에 대한<br>보호자님의 기억을 남겨주세요.</p>
+    <div class="illu" style="flex-direction:column">
+      <div class="stack" id="stack"><div class="card c1"></div><div class="card c2"></div><div class="card c3"></div></div>
+      <div class="center"><span class="pill"><b id="count">0</b>장의 사진 연동완료</span></div>
+    </div>
+    <button class="rough btn" id="goReg">네, 남겨볼래요.</button>
+    <button class="link" id="skipMemo">남기지 않고 넘어갈래요.</button>
+  </section>
+
+  <!-- 5. Pet form -->
+  <section class="screen" id="form">
+    <button class="back" data-back><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button>
+    <div class="scroll">
+      <div class="q"><span>1.</span>우리 아이의 이름을 알려주세요.</div>
+      <label class="rough field"><input id="petName" maxlength="12" placeholder="예: 콩이, 보리, 뭉치" autocomplete="off"></label>
+      <div class="err" id="nameErr"></div>
+
+      <div class="q"><span>2.</span>아이와 처음 만난 날을 알려주세요.</div>
+      <button class="rough field btnish" id="dateBtn"><span id="dateTxt" class="ph">날짜를 선택해 주세요</span>
+        <svg class="chev" viewBox="0 0 9 15" style="transform:rotate(90deg)"><path d="M2 2l5 5.5L2 13" fill="none" stroke="#AF9083" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="cal" id="cal"><div class="rough cal-in">
+        <div class="cal-head">
+          <button id="prevM" aria-label="이전 달"><svg width="9" height="15" viewBox="0 0 9 15"><path d="M7 2 2 7.5 7 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          <button class="cal-title" id="calTitle"></button>
+          <button id="nextM" aria-label="다음 달"><svg width="9" height="15" viewBox="0 0 9 15"><path d="M2 2l5 5.5L2 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="ym" id="ym"></div>
+      </div></div>
+      <div class="sub" id="dateSub"></div>
+
+      <div class="q"><span>3.</span>우리 아이의 어떤 모습을 오래 기억하고 싶나요?</div>
+      <label class="rough field"><textarea id="memo" maxlength="200" placeholder="예:&#10;산책 가자고 하면 하네스를 물고 오던 아이예요"></textarea></label>
+
+      <div class="q"><span>4.</span>우리 아이와 닮은 캐릭터를 만들어주세요.</div>
+      <button class="rough field char-field" id="charBtn">
+        <span class="mini" id="charMini" hidden></span>
+        <span class="t" id="charTxt"><span class="ph">캐릭터 만들기</span></span>
+        <svg class="chev" viewBox="0 0 9 15"><path d="M2 2l5 5.5L2 13" fill="none" stroke="#AF9083" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <button class="rough btn save" id="save">저장하기</button>
+    </div>
+  </section>
+
+  <!-- 6. Customizer -->
+  <section class="screen" id="custom">
+    <div class="c-top">
+      <span style="width:40px"></span>
+      <h2>캐릭터 만들기</h2>
+      <button class="icon-btn" data-back aria-label="닫기"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3 3 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="c-stage"><div id="cPreview"></div>
+      <button class="dice" id="dice" aria-label="랜덤"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A423C" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="#4A423C"/><circle cx="15.5" cy="15.5" r="1.3" fill="#4A423C"/><circle cx="12" cy="12" r="1.3" fill="#4A423C"/></svg></button>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div class="panel" id="panel"></div>
+    <div class="c-foot"><button class="rough btn" id="charDone">이대로 할게요</button></div>
+  </section>
+
+  <!-- 7. 나의 섬 -->
+  <section class="screen" id="island">
+    <header class="i-head" id="ihead"><button class="music" id="music" aria-label="음악"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M9 18V5l11-2v13" fill="none" stroke="#4A423C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.6" fill="#4A423C"/><circle cx="17.5" cy="16" r="2.6" fill="#4A423C"/></svg><i></i></button>
+      <img class="i-logo" src="/img/logo-s.png" alt="AFTER LIFE">
+      <button class="i-mail" id="mail" aria-label="오늘의 쪽지"><img src="/img/mail.png" alt=""><i class="dot" id="mailDot"></i></button>
+    </header>
+    <div class="bg" id="bgA"></div><div class="bg" id="bgB"></div><div class="bg-rain" id="bgRain"></div><div class="fx">
+      <div class="cloud c1"></div><div class="cloud c2"></div>
+      <svg class="bird b1" viewBox="0 0 40 20"><path d="M2 12 Q10 2 20 11 Q30 2 38 12" fill="none" stroke="#5A4A42" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <svg class="bird b2" viewBox="0 0 40 20"><path d="M2 12 Q10 2 20 11 Q30 2 38 12" fill="none" stroke="#5A4A42" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <svg class="waves" viewBox="0 0 402 120" preserveAspectRatio="none"><g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path class="w w1" d="M30 30 q14 -6 28 0"/><path class="w w2" d="M320 50 q14 -6 28 0"/><path class="w w3" d="M90 80 q14 -6 28 0"/><path class="w w4" d="M250 100 q14 -6 28 0"/><path class="w w5" d="M180 40 q12 -5 24 0"/></g></svg>
+    </div>
+    <div class="isles" id="isles">
+      <div class="slide"><div class="isle" id="isle"><img class="iimg" src="/img/isl1.png" alt="추모 섬"></div></div>
+      <div class="slide" id="houseSlide"><button class="isl-btn store-btn">기억을 저장하는 섬</button><div class="isle"><img class="iimg i2" src="/img/isl2.png" alt="기억의 집"><div class="house-hit"><i class="sp s1"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i><i class="sp s2"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i><i class="sp s3"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i><i class="sp s4"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i><span class="glow"></span></div></div><div class="rough hint">집을 터치해서 안으로 들어가보세요.<br>그동안 저장한 사진과 글을 볼 수 있어요.</div></div>
+      <div class="slide" id="commSlide"><button class="isl-btn" id="toComm">함께 기억하는 섬</button><div class="isle"><img class="iimg i3" src="/img/isl3.png" alt="돌탑 언덕"></div></div>
+    </div>
+    
+    <button class="add-pill" id="addPet"><span>+</span> 아이 추가</button>
+    <nav class="tabbar"></nav>
+    <div class="mood-dim" id="moodDim"></div>
+    <div class="mood" id="mood">
+      <div class="handle"></div>
+      <button class="back" id="moodBack"><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button>
+      <p class="copy mq">오늘의 마음은 어떤 날씨같나요?</p>
+      <div class="mgrid" id="mgrid">
+        <button class="mc" data-m="sun"><img src="/img/sun.png" alt=""><span>평온해요</span></button>
+        <button class="mc" data-m="rain"><img src="/img/rain.png" alt=""><span>무기력해요</span></button>
+        <button class="mc" data-m="cloud"><img src="/img/cloud.png" alt=""><span>무덤덤해요</span></button>
+        <button class="mc" data-m="moon"><img src="/img/moon.png" alt=""><span>그리워요</span></button>
+      </div>
+      <div class="spacer"></div>
+      <button class="rough btn" id="moodSave">오늘의 마음 기록하기</button>
+      <button class="link" id="moodSkip" style="color:var(--brown-500);border-color:var(--brown-500)">오늘은 건너뛸게요.</button>
+    </div>
+  </section>
+
+
+  <!-- 8. 리캡 만들기 -->
+  <section class="screen" id="recap">
+    <button class="back" data-back><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button>
+    <div class="scroll" id="rcScroll">
+      <div class="rc-head"><div class="rc-pet" id="rcPet"></div><p class="copy" id="rcHello"></p></div>
+      <div class="q"><span>1.</span>이 이야기의 제목을 지어주세요.</div>
+      <label class="rough field"><input id="rcTitle" maxlength="10" placeholder="예: 한강 산책, 바다 여행" autocomplete="off"></label>
+      <div class="sub">제목은 책장에 꽂히는 책 이름이 돼요 · 최대 10자</div>
+      <div class="q"><span>2.</span>어느 시간을 담을까요?</div>
+      <div class="chips" id="rcPeriod"></div>
+      <div class="q"><span>3.</span>함께 엮을 사진을 골라주세요.</div>
+      <div class="rc-photos" id="rcPhotos"></div>
+      <label class="rc-add" for="rcPick">+ 갤러리에서 사진 더 불러오기</label>
+      <input type="file" id="rcPick" accept="image/*" multiple hidden>
+      <div class="q"><span>4.</span>남기고 싶은 한 줄이 있나요?</div>
+      <label class="rough field"><textarea id="rcLine" maxlength="80" placeholder="예: 바람 냄새를 제일 좋아하던 날"></textarea></label>
+      <button class="rough btn save" id="rcMake">리캡 만들기</button>
+    </div>
+  </section>
+
+  <!-- 9. 리캡 보기 -->
+  <section class="screen" id="recapView">
+    <div class="rv-top"><button class="icon-btn" data-back aria-label="닫기"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3 3 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+    <div class="scroll"><div class="rv" id="rv"></div></div>
+    <div class="rv-foot" id="rvFoot"><button class="rough btn" id="rvShelf">책장에 꽂기</button></div>
+  </section>
+
+  <!-- 10. 책장 -->
+  <section class="screen" id="shelf">
+    <header class="i-head"><img class="i-logo" src="/img/logo-s.png" alt="AFTER LIFE"></header>
+    <div class="books" id="books"></div>
+    <div class="floor"><svg viewBox="0 0 402 220" preserveAspectRatio="none"><g fill="none" stroke="#4A423C" stroke-width="1.3" stroke-linecap="round" opacity=".55"><path d="M0 12 Q30 9 48 13"/><path d="M360 40 q22 -6 42 0"/><path d="M262 110 q-20 4 -10 14 q22 6 46 -4 q8 -10 -12 -12 q-14 -2 -24 2"/><path d="M325 107 l8 -1"/><path d="M370 140 q18 2 32 -4"/><path d="M10 64 q6 2 4 8"/></g></svg></div>
+    <p class="shelf-note">추모 섬에서 리캡을 보고 마음에 들면 저장해 보세요.<br>저장한 리캡만 이곳 책장에 꽂혀요.</p><button id="addAlbum" hidden></button>
+    <nav class="tabbar"></nav>
+  </section>
+
+  <!-- 11. 앨범 만들기 -->
+  <section class="screen" id="albumNew">
+    <header class="i-head s-head"><button class="back hb" data-back><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button><img class="i-logo" src="/img/logo-s.png" alt=""><span class="i-mail"><img src="/img/mail.png" alt=""></span></header>
+    <div class="scroll an-body">
+      <div class="q"><span>1.</span>앨범에 담을 사진을 골라주세요</div>
+      <div class="rough field an-pick" id="anPick"></div>
+      <input type="file" id="anFile" accept="image/*" multiple hidden>
+      <div class="q"><span>2.</span>앨범의 이름을 적어 주세요.</div>
+      <label class="rough field"><input id="anTitle" maxlength="10" placeholder="예: 제주 여행, 봄나들이" autocomplete="off"></label>
+      <div class="spacer"></div>
+    </div>
+    <button class="rough btn an-save" id="anSave">저장하기</button>
+    <nav class="tabbar"></nav>
+  </section>
+
+  <!-- 12. 앨범 보기 -->
+  <section class="screen" id="albumView">
+    <div class="av-top"><button class="back" data-back><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>책장으로</button></div>
+    <div class="av-title"><h2 id="avTitle"></h2><div class="av-tools"><button id="avShare" aria-label="저장·공유"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#4A423C" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12"/></svg></button></div><label class="soft-tg" title="흐리게 보기"><input type="checkbox" id="avSoft"><i></i><span>흐리게</span></label><button class="pen" id="avEdit" aria-label="제목 수정"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#4A423C" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4z"/><path d="M14.5 5.5l3 3"/></svg></button></div>
+    <div class="av-meta" id="avMeta"></div><div class="scroll av-scroll" id="avScroll"><div class="av-grid" id="avGrid"></div></div>
+    <nav class="tabbar"></nav>
+  </section>
+
+  <!-- 13. 함께 기억하는 섬 -->
+  <section class="screen" id="comm">
+    <div class="bg" style="background-image:url(/img/bg-base.jpg)"></div>
+    <header class="i-head"><img class="i-logo" src="/img/logo-s.png" alt=""><span class="i-mail"><img src="/img/mail.png" alt=""></span></header>
+    <div class="cm-ov" id="cmOv"><img src="/img/isl3.png" alt="함께 기억하는 섬"><div id="cmTags"></div><p class="cm-ovh">돌탑을 눌러 이야기 섬으로 들어가 보세요</p></div>
+    <div class="cm-zoom" id="cmZoom"><div class="cm-pan" id="cmPan"><img src="/img/isl3.png" alt="" id="cmImg"><div id="cmFl"></div></div></div>
+    <button class="back cm-back" id="cmBack"><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="cmBk">함께 기억하는 섬</span></button>
+    <button class="rough field cm-dd" id="cmDd"><span>커뮤니티 목록 펼쳐 보기</span><svg width="16" height="10" viewBox="0 0 16 10"><path d="M1.5 1.5 8 8l6.5-6.5" fill="none" stroke="#4A423C" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    <div class="rough cm-list" id="cmList"></div>
+    <button class="cm-arr l" id="cmPrev" aria-label="이전"><svg viewBox="0 0 20 20"><path d="M14 4 5 10l9 6z" fill="#fff"/></svg></button>
+    <button class="cm-arr r" id="cmNext" aria-label="다음"><svg viewBox="0 0 20 20"><path d="M6 4l9 6-9 6z" fill="#fff"/></svg></button>
+    <button class="rough cm-enter" id="cmEnter"></button><div class="rough cm-card" id="cmCard"></div><button class="cm-leave" id="cmLeave">🌼 꽃과 메시지 남기기</button>
+    <nav class="tabbar"></nav>
+  </section>
+
+  <!-- 14. 커뮤니티 피드 -->
+  <section class="screen" id="feed">
+    <header class="i-head s-head"><button class="back hb" data-back><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>목록</button><img class="i-logo" src="/img/logo-s.png" alt=""><span class="i-mail"><img src="/img/mail.png" alt=""></span></header>
+    <div class="fd-title"><h2 id="fdTitle"></h2><span id="fdCount"></span></div>
+    <div class="scroll fd-list" id="fdList"></div>
+    <div class="fd-write"><label class="fd-ph" for="fdFile" id="fdPhBtn"><svg viewBox="0 0 24 24" width="22" height="22"><rect x="2.5" y="3.5" width="19" height="17" rx="3.5" fill="#AF9083"/><circle cx="8.5" cy="9" r="2" fill="#fff"/><path d="M4.5 18 10 12.5l3.5 3.5 2.5-2.5 3.5 3.5z" fill="#fff"/></svg></label>
+      <input type="file" id="fdFile" accept="image/*" hidden><input id="fdText" placeholder="이야기를 나눠주세요" maxlength="200" autocomplete="off"><button id="fdSend">올리기</button></div>
+  </section>
+  <section class="screen" id="ph"><div class="bg" style="background-image:url(/img/bg-base.jpg)"></div>
+    <header class="i-head"><img class="i-logo" src="/img/logo-s.png" alt=""></header>
+    <div class="ph-box"><h2 id="phT"></h2><p>이 화면은 다음 단계에서 이어져요.</p></div><nav class="tabbar"></nav></section>
+
+  <!-- 15. 프로필 -->
+  <section class="screen" id="profile">
+    <button class="back" data-tabhome><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button>
+    <div class="scroll pf-body">
+      <div class="pf-card" id="pfCard"></div>
+      <div class="q"><span>1.</span>기본 정보를 설정해주세요.</div>
+      <div class="pf-row"><label>이름</label><div class="rough field"><input id="pfName" maxlength="10" autocomplete="off"></div></div>
+      <div class="pf-row"><label>아이디</label><div class="rough field"><input id="pfId" maxlength="16" placeholder="영문으로 작성해주세요." autocomplete="off" autocapitalize="off"></div></div>
+      <div class="err" id="pfErr" style="padding-left:96px"></div>
+      <div class="q"><span>2.</span>보호자 님의 캐릭터를 만들어보세요.</div>
+      <div class="pc-wrap">
+        <div class="pc-top"><div class="pc-stage" id="pcPrev"></div><button class="rough pc-rand" id="pcRand">무작위로 꾸미기</button></div>
+        <div class="tabs" id="pcTabs"></div>
+        <div class="pc-panel" id="pcPanel"></div>
+      </div>
+      <button class="rough btn save" id="pfSave">저장하기</button>
+      <div style="height:110px"></div>
+    </div>
+    <nav class="tabbar"></nav>
+  </section>
+
+  <!-- 16. 설정 -->
+  <section class="screen" id="settings">
+    <button class="back" data-tabhome><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button>
+    <div class="scroll st-body" id="stBody"></div>
+    <div class="st-modal" id="stModal"><div class="rough st-box"><p id="stMsg"></p><div class="st-mb"><button class="chip" id="stNo">취소</button><button class="chip danger" id="stYes">지우기</button></div></div></div>
+    <nav class="tabbar"></nav>
+  </section>
+
+  <!-- 17. 기억의 집 -->
+  <section class="screen" id="room">
+    <div class="room-bg"></div>
+    <header class="i-head s-head"><button class="back hb" data-back><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button><img class="i-logo" src="/img/logo-s.png" alt=""><span class="i-mail"><img src="/img/mail.png" alt=""></span></header>
+    <div class="rm-body">
+      <p class="rm-t">보관해 둔 추억을 다시 꺼내 볼 수 있어요.</p>
+      <div class="search"><input id="rmQ" placeholder="사진 글, 묶음, 메시지를 검색해 보세요" autocomplete="off"><button id="rmCal" aria-label="날짜로 찾기"><svg viewBox="0 0 24 24" width="26" height="26"><rect x="3.5" y="5" width="17" height="15.5" rx="3" fill="none" stroke="#4A423C" stroke-width="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="#4A423C" stroke-width="2" stroke-linecap="round"/><g fill="#4A423C"><circle cx="8" cy="13" r="1"/><circle cx="12" cy="13" r="1"/><circle cx="16" cy="13" r="1"/><circle cx="8" cy="16.5" r="1"/><circle cx="12" cy="16.5" r="1"/><circle cx="16" cy="16.5" r="1"/></g></svg></button><button id="rmGo" aria-label="검색"><svg viewBox="0 0 24 24" width="26" height="26"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#4A423C" stroke-width="2.4"/><path d="M15.5 15.5l5 5" stroke="#4A423C" stroke-width="2.6" stroke-linecap="round"/></svg></button><input type="date" id="rmDate" class="rm-date"></div>
+      <div class="rm-chips" id="rmChips"></div>
+      <div class="rm-res" id="rmRes"></div>
+    </div>
+    <button class="shelf-hit" id="shelfHit" aria-label="책장 열기"><i class="sp s1"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i><i class="sp s2"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i></button>
+    <div class="rm-tip" id="rmTip">책장을 누르면 앨범을 펼쳐 볼 수 있어요</div>
+    <nav class="tabbar"></nav>
+  </section>
+
+  <!-- 18. 꽃과 메시지 남기기 -->
+  <section class="screen" id="leave">
+    <button class="back" data-back><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button>
+    <div class="scroll lv-body">
+      <div class="rough draw-box"><canvas id="cv"></canvas><span class="cv-ph" id="cvPh">돌탑에 놓을 꽃을 자유롭게 그려주세요</span></div>
+      <div class="pens" id="pens"></div>
+      <div class="q"><span>1.</span>메시지를 남기고 싶은 닉네임을 설정해 주세요.</div>
+      <label class="rough field"><input id="lvNick" maxlength="12" placeholder="예: 콩이맘, 보리 언니" autocomplete="off"></label>
+      <div class="q"><span>2.</span>남기고 싶은 메시지를 작성해 주세요.</div>
+      <label class="rough field"><textarea id="lvMsg" maxlength="200" placeholder="예:&#10;산책 가자고 하면 하네스를 물고 오던 아이예요"></textarea></label>
+      <button class="rough btn save" id="lvSave">저장하기</button>
+      <div style="height:30px"></div>
+    </div>
+  </section>
+
+  <!-- 19. 오늘의 쪽지 (감정 다이어리 + AI) -->
+  <div class="dim2" id="dDim"></div>
+  <div class="diary" id="diary">
+    <div class="handle"></div>
+    <div class="dy-head"><h3>오늘의 쪽지</h3><button class="icon-btn" id="dyX" aria-label="닫기"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3 3 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+    <div class="scroll dy-body">
+      <div class="dy-card ai" id="dyAi"></div>
+      <div class="dy-card"><div class="dy-t">오늘 마음 한 줄</div>
+        <div class="dy-in"><input id="dyLine" maxlength="80" placeholder="지금 떠오르는 마음을 적어 보세요"><button id="dySave">남기기</button></div></div>
+      <div class="dy-card"><div class="dy-t">기념일 알림 미리 보기</div><div class="opts two" style="margin:0"><button class="opt" id="pvBday">🎂 만난 날 알림</button><button class="opt" id="pvStar">🕯 별이 된 날 알림</button></div></div>
+      <div class="dy-card"><div class="dy-t">나의 마음 기록</div><div class="dy-week" id="dyWeek"></div><div class="dy-stats" id="dyStats"></div><div class="dy-list" id="dyList"></div></div>
+    </div>
+  </div>
+
+  <!-- 20. 아이 등록 (4단계) -->
+  <section class="screen" id="reg">
+    <div class="rg-top"><button class="icon-btn" id="rgBack" aria-label="뒤로"><svg width="12" height="18" viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span id="rgStep">1 / 4</span><span style="width:40px"></span></div>
+    <div class="rg-bar"><i id="rgBar"></i></div>
+    <div class="scroll rg-body" id="rgBody">
+      <div class="rg-s" data-s="1">
+        <div class="rg-k">아이 등록</div>
+        <h2 class="rg-h">함께한 아이를<br>소개해 주세요</h2>
+        <p class="rg-d">섬에 머물 아이의 이름과 종을 알려 주세요.</p>
+        <details class="rg-code" id="rgCodeBox"><summary>공동 보호자로 초대받았나요? <b>아이 코드 입력</b></summary>
+          <div class="code-row"><input id="rgCode" placeholder="예: AL-BORI" maxlength="8" autocapitalize="characters" autocomplete="off"><button id="rgJoin">함께하기</button></div>
+          <p class="rg-d s">가족이 보낸 아이 코드를 넣으면 같은 아이의 섬과 기록을 함께 볼 수 있어요.</p></details>
+        <div class="rg-l">이름</div>
+        <label class="rough field"><input id="rgName" maxlength="12" placeholder="예: 콩이, 보리, 뭉치" autocomplete="off"></label>
+        <div class="rg-l">어떤 아이인가요?</div>
+        <div class="rg-type" id="rgType"><button data-t="dog"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M9 11c-3-1-5 2-4 6s3 3 4 2M23 11c3-1 5 2 4 6s-3 3-4 2"/><path d="M9 11c1-4 4-5 7-5s6 1 7 5c1 4 1 9-2 12-2 2-8 2-10 0-3-3-3-8-2-12z"/><circle cx="13" cy="15" r="1.2" fill="currentColor"/><circle cx="19" cy="15" r="1.2" fill="currentColor"/><path d="M15 19h2l-1 1.2z" fill="currentColor"/></svg><span>강아지</span></button><button data-t="cat"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M7 6l4 6M25 6l-4 6"/><path d="M7 6c-1 5-1 9 0 12 2 6 16 6 18 0 1-3 1-7 0-12-3 2-5 3-9 3s-6-1-9-3z"/><circle cx="12.5" cy="16" r="1.2" fill="currentColor"/><circle cx="19.5" cy="16" r="1.2" fill="currentColor"/><path d="M15 19h2l-1 1.2zM9 19l-4 1M23 19l4 1"/></svg><span>고양이</span></button><button data-t="etc"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="11" r="2.6"/><circle cx="16" cy="8" r="2.6"/><circle cx="22" cy="11" r="2.6"/><path d="M16 14c4 0 7 5 7 8s-3 3-7 2c-4 1-7 1-7-2s3-8 7-8z"/></svg><span>다른 친구</span></button></div>
+        <div class="rg-l">품종 <small>(선택)</small></div>
+        <label class="rough field"><input id="rgBreed" maxlength="16" placeholder="예: 말티즈, 코리안 숏헤어" autocomplete="off"></label>
+        <div class="rg-l">성별 <small>(선택)</small></div>
+        <div class="rg-seg" id="rgSex"><button data-v="m">남아</button><button data-v="f">여아</button><button data-v="x">모름</button></div>
+      </div>
+      <div class="rg-s" data-s="2">
+        <h2 class="rg-h"><span class="nm"></span>의 사진을<br>골라 주세요</h2>
+        <p class="rg-d">이 사진을 보고 <span class="nm"></span><span class="eul"></span> 닮은 캐릭터를 만들어 드려요. 얼굴이 잘 보이는 사진이면 더 좋아요.</p>
+        <label class="rg-rep" for="rgFile" id="rgRep"><span class="badge">대표 사진</span><span class="cam"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C9725A" stroke-width="1.8"><rect x="3" y="6.5" width="18" height="13" rx="3"/><path d="M8.5 6.5l1.5-2.5h4l1.5 2.5"/><circle cx="12" cy="13" r="3.4"/></svg></span><b>사진 고르기</b><small>캐릭터와 액자에 쓰여요</small></label>
+        <div class="rg-grid" id="rgGrid"></div>
+        <p class="rg-d s">여러 장을 고르면 눌러서 대표 사진으로 정할 수 있어요.</p>
+        <div class="rg-src"><label for="rgFile" class="rough">🖼 앨범에서 고르기</label><button class="rough" id="rgFromGal">📱 연동한 사진에서 고르기</button></div>
+        <input type="file" id="rgFile" accept="image/*" multiple hidden>
+      </div>
+      <div class="rg-s" data-s="3">
+        <h2 class="rg-h"><span class="nm"></span><span class="eul"></span> 처음 만난 날은<br>언제인가요?</h2>
+        <p class="rg-d">정확하지 않아도 괜찮아요. 태어난 날이나 가족이 된 날로 적어도 돼요.</p>
+        <div class="rg-l">만난 날</div>
+        <div class="ymd" id="rgMet"></div>
+        <label class="rg-chk"><input type="checkbox" id="rgYearOnly"><i></i>날짜는 기억나지 않고, 연도만 알아요</label>
+        <div class="rg-info">📅 만난 날이 다가오면 그날의 추억 모음을 먼저 꺼내 보여 드릴게요.</div>
+      </div>
+      <div class="rg-s" data-s="4">
+        <h2 class="rg-h"><span class="nm"></span><span class="eun"></span> 지금<br>어디에 있나요?</h2>
+        <p class="rg-d">어느 쪽이든 괜찮아요. 나중에 언제든 바꿀 수 있어요.</p>
+        <button class="rg-opt" data-w="with"><span class="ic">☀️</span><span><b>지금 함께 지내요</b><small>오늘의 사진과 한 줄 기록을 쌓아 두면 함께한 시간이 추억 모음이 돼요.</small></span></button>
+        <button class="rg-opt" data-w="star"><span class="ic">⭐</span><span><b>무지개다리를 건넜어요</b><small><span class="nm"></span><span class="ga"></span> 별이 된 날을 적어 두면, 그날 즈음 섬이 별빛으로 물들어요.</small></span></button>
+        <div id="rgStarBox" hidden><div class="rg-l">별이 된 날 <small>(선택)</small></div><div class="ymd" id="rgStar"></div>
+          <p class="rg-d s">지금 적기 어렵다면 비워 두셔도 돼요. 마음이 준비되면 그때 적어 주세요.</p></div>
+      </div>
+      <div class="rg-s" data-s="5">
+        <div class="rg-done-art" id="rgArt"></div>
+        <h2 class="rg-h c" id="rgDoneT"></h2>
+        <p class="rg-d c" id="rgDoneD"></p>
+        <div class="rg-sum" id="rgSum"></div>
+      </div>
+    </div>
+    <div class="rg-foot"><button class="rough btn rg-next" id="rgNext">다음 ›</button><button class="link" id="rgLater">나중에 적을게요</button></div>
+  </section>
+
+  <!-- 21. 리캡 저장·공유 시트 -->
+  <div class="dim2" id="shDim"></div>
+  <div class="diary" id="share">
+    <div class="handle"></div>
+    <div class="dy-head"><h3 id="shT"></h3><button class="icon-btn" id="shX" aria-label="닫기"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3 3 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+    <div class="sh-tabs"><button class="on" data-t="save">⤓ 이미지로 저장</button><button data-t="link">⇪ 공유하기</button></div>
+    <div class="scroll dy-body" id="shBody"></div>
+    <div class="sh-foot"><button class="rough btn rg-next" id="shGo"></button></div>
+  </div>
+
+  <!-- 22. 기념일 알림 -->
+  <div class="anv" id="anv"><button class="anv-x" id="anvX">×</button><span class="anv-tag" id="anvTag"></span><h3 id="anvT"></h3><p id="anvD"></p><div class="anv-b"><button id="anvA"></button><button class="pr" id="anvB"></button></div></div>
+
+  <!-- 23. 추모 섬 리캡 플레이어 -->
+  <section class="screen" id="player">
+    <div class="pl-bg"></div>
+    <div class="pl-top"><button class="pb" data-back aria-label="뒤로">←</button><button class="pb" id="plSave" aria-label="저장"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#4A423C" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12"/></svg></button><button class="pb" id="plEdit" aria-label="리캡 고치기" style="background:#FDD9BD">✎</button><button class="pb stop" data-back>✕ 중단하기</button></div>
+    <h2 class="pl-t" id="plT"></h2><div class="pl-s" id="plS"></div>
+    <div class="pl-stage" id="plStage"><button class="pl-arr l" id="plPrev">◀</button><button class="pl-arr r" id="plNext">▶</button><button class="pl-bm" id="plBm">🔖</button></div>
+    <div class="pl-dots" id="plDots"></div>
+    <div class="pl-cap" id="plCap"></div>
+    <button class="pl-end" id="plEnd">감상 마치기</button>
+    <div class="pl-ctl"><button id="plPause"><i>❚❚</i><span>일시정지</span></button><button id="plSpeed">⇋ 흐림·속도</button></div>
+    <div class="pl-pop" id="plPop"><label class="soft-tg"><input type="checkbox" id="plSoft"><i></i><span>사진 흐리게</span></label><div class="sh-opts" id="plSp"></div></div>
+  </section>
+  <div class="dim2" id="edDim"></div>
+  <div class="diary" id="edit"><div class="handle"></div>
+    <div class="dy-head"><h3>리캡 고치기</h3><button class="icon-btn" id="edX">✕</button></div>
+    <div style="padding:0 18px"><label class="rg-l" style="display:block;margin:6px 0 8px">리캡 제목</label><label class="rough field"><input id="edTitle" maxlength="14"></label></div>
+    <div class="scroll dy-body" id="edList"></div>
+    <div class="sh-foot" style="display:flex;gap:10px"><label for="edFile" class="rough btn" style="flex:1;background:#fff">+ 사진 추가</label><input type="file" id="edFile" accept="image/*" multiple hidden><button class="rough btn rg-next" style="flex:1" id="edDone">다 고쳤어요</button></div>
+  </div>
+  <div class="lb" id="lb"><button class="x" id="lbX">×</button><img id="lbImg" alt=""><input id="lbCap" maxlength="30" placeholder="이 사진에 한 줄 남기기"></div>
+  <div class="toast" id="toast"></div>
+</div>
+
