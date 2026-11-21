@@ -176,6 +176,7 @@ function go(id){
   b.classList.remove('left'); b.classList.add('on'); NAV.push(id);
 }
 function back(){
+  if(NAV[NAV.length-1]==='shelf'&&NAV[NAV.length-2]!=='room'){ openRoom(); return; }
   if(NAV.length<2) return;
   const cur=NAV.pop(), prev=NAV[NAV.length-1];
   $(cur).classList.remove('on','left');
