@@ -878,7 +878,7 @@ let REG=null, RS=1;
 function newCode(){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s='AL-'; for(let i=0;i<4;i++) s+=c[Math.floor(Math.random()*c.length)]; return s; }
 function openReg(edit){ REG=edit?JSON.parse(JSON.stringify({...edit,dog:edit.dog})):{name:'',type:'dog',etc:'',breed:'',memo:'',photos:S.photos.slice(0,9),rep:0,met:null,yearOnly:false,where:'with',star:null,mood:null};
   REG._edit=edit||null; RS=1; $('rgName').value=REG.name; $('rgBreed').value=REG.breed||''; $('rgMemo').value=REG.memo||''; $('rgEtc').value=REG.etc||''; $('rgCode').value='';
-  $('rgPop').classList.toggle('off',!!edit);
+  $('rgPopDim').classList.add('off'); if(!edit) setTimeout(()=>$('rgPopDim').classList.remove('off'),450);
   drawYMD('rgMet',REG.met); drawYMD('rgStar',REG.star&&REG.star.date); drawReg(); go('reg'); }
 function drawYMD(id,val){ const d=val?new Date(val):null; const now=new Date(); const el=$(id);
   const y=[`<option value="">연도</option>`]; for(let i=now.getFullYear();i>=now.getFullYear()-30;i--) y.push(`<option value="${i}" ${d&&d.getFullYear()===i?'selected':''}>${i}년</option>`);
@@ -904,7 +904,7 @@ $('rgBreed').oninput=()=>REG.breed=$('rgBreed').value.trim();
 $('rgType').querySelectorAll('button').forEach(b=>b.onclick=()=>{REG.type=b.dataset.t;drawReg(); if(REG.type==='etc') setTimeout(()=>$('rgEtc').focus(),50);});
 document.querySelectorAll('#reg .rg-opt').forEach(b=>b.onclick=()=>{REG.where=b.dataset.w;drawReg();});
 $('rgMood').querySelectorAll('button').forEach(b=>b.onclick=()=>{REG.mood=b.dataset.m;setBg(REG.mood);drawReg();});
-$('rgPopX').onclick=()=>$('rgPop').classList.add('off');
+$('rgPopX').onclick=()=>$('rgPopDim').classList.add('off'); $('rgPopDim').onclick=e=>{ if(e.target.id==='rgPopDim') $('rgPopDim').classList.add('off'); };
 $('rgCode').onkeydown=e=>{ if(e.key==='Enter') $('rgJoin').click(); };
 function regDog(){ if(REG.dog&&REG.dog.sp) return REG.dog; const br=(REG.breed||'').replace(/ /g,''); const t=REG.type==='cat'?'cat':'dog'; const hit=br&&PET_PRESETS.find(x=>x[1].replace(/ /g,'').includes(br)||br.includes(x[1].replace(/ /g,''))); const pool=PET_PRESETS.filter(x=>x[0]===t); return JSON.parse(JSON.stringify((hit||pool[t==='dog'?1:0])[2])); }
 function rgSkipMood(){ return !!REG._edit; }

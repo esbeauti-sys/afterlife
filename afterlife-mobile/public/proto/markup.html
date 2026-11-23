@@ -311,9 +311,7 @@
     <div class="rg-top"><button class="back" id="rgBack"><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button><span id="rgStep">1 / 4</span></div>
     <div class="scroll rg-body" id="rgBody">
       <div class="rg-s" data-s="1">
-        <div class="rg-pop" id="rgPop"><button class="x" id="rgPopX" aria-label="닫기">×</button>
-          <b>공동 보호자로 초대받으셨나요?</b><p>아래 칸에 코드를 입력해주세요.</p>
-          <div class="code-row"><input id="rgCode" placeholder="ex) AL-BORI" maxlength="8" autocapitalize="characters" autocomplete="off"><button id="rgJoin">확인</button></div></div>
+        
         <div class="q"><span>1.</span>우리 아이의 이름을 알려주세요.</div>
         <label class="rough field"><input id="rgName" maxlength="12" placeholder="예: 콩이, 보리, 뭉치" autocomplete="off"></label>
         <div class="q"><span>2.</span>어떤 동물인가요?</div>
@@ -346,6 +344,9 @@
         <div id="rgStarBox" hidden><div class="ymd" id="rgStar"></div></div>
       </div>
     </div>
+    <div class="rg-popdim" id="rgPopDim"><div class="rg-pop" id="rgPop"><button class="x" id="rgPopX" aria-label="닫기">×</button>
+          <b>공동 보호자로 초대받으셨나요?</b><p>아래 칸에 코드를 입력해주세요.</p>
+          <div class="code-row"><input id="rgCode" placeholder="ex) AL-BORI" style="text-transform:none" maxlength="8" autocapitalize="characters" autocomplete="off"><button id="rgJoin">확인</button></div></div></div>
     <div class="rg-foot"><button class="rough btn rg-next" id="rgNext">저장하기</button><button class="link" id="rgLater"></button></div>
   </section>
 
