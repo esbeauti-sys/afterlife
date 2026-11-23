@@ -861,3 +861,11 @@ span.i-mail img{width:30px}
 .rg-pop input{flex:1;height:46px;border:1.5px solid #E3A58F;border-radius:12px;background:#FAF6F0;padding:0 16px;font:400 14px var(--serif);color:#4A423C}
 .rg-pop .code-row button{border:0;border-radius:12px;background:#E3A58F;color:#fff;font:600 14px var(--sans);padding:0 16px;cursor:pointer}
 #rgEtcBox[hidden],#rgStarBox[hidden]{display:none!important}
+#player.empty .pl-stage,#player.empty .pl-dots,#player.empty .pl-cap,#player.empty .pl-end,#player.empty .pl-ctl,#player.empty #plSave,#player.empty #plEdit{display:none}
+.pl-empty{display:none}
+#player.empty .pl-empty{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:0 34px 120px;text-align:center;position:relative;z-index:2}
+.pl-empty img{width:180px;margin-bottom:14px}
+.pl-empty b{font:500 19px var(--serif);color:#fff}
+#player.empty{background:linear-gradient(#3F4C8E,#8C80BF 70%,#B49CC9)}
+.pl-empty p{font:400 14px/1.6 var(--serif);color:#F6E3DA;margin:0 0 22px}
+.pl-empty .btn{width:100%}

@@ -1017,11 +1017,14 @@ async function saveRecap(){ const cv=document.createElement('canvas'); await pai
 /* ---------- 추모 섬 리캡 플레이어 ---------- */
 let PL=null;
 function openPlayer(pet){ const ph=[...new Set(pet.photos&&pet.photos.length?pet.photos:S.photos)];
-  if(!ph.length){ toast(`${pet.name}의 사진을 먼저 불러와 주세요`); NAV=['island']; openReg(pet); RS=2; drawReg(); return; }
   PL={pet,ph,i:0,play:true,sp:4,bm:new Set(),cap:{},title:''}; $('plT').textContent=`${pet.name}의 리캡`;
+  const em=!ph.length; $('player').classList.toggle('empty',em); $('plEmT').textContent=`아직 ${pet.name}의 사진이 없어요`;
+  if(em){ $('plStage').querySelectorAll('.pl-ph').forEach(e=>e.remove()); $('plS').textContent=''; $('plDots').innerHTML=''; $('plCap').textContent=''; go('player'); return; }
   $('plStage').querySelectorAll('.pl-ph').forEach(e=>e.remove());
   ph.forEach(u=>{ const d=div('pl-ph'); d.style.backgroundImage=`url("${u}")`; $('plStage').prepend(d); });
   $('plSoft').checked=false; $('player').classList.remove('soft'); $('plPop').classList.remove('on'); go('player'); plShow(0); plTick(); }
+$('plFile').onchange=e=>{ const u=[...e.target.files].map(x=>URL.createObjectURL(x)); e.target.value=''; if(!u.length||!PL) return;
+  const pet=PL.pet; pet.photos=(pet.photos||[]).concat(u); S.photos=S.photos.concat(u); NAV.pop(); openPlayer(pet); toast(`사진 ${u.length}장으로 리캡을 만들었어요`); };
 function plShow(i){ const n=PL.ph.length; PL.i=(i+n)%n; const els=[...$('plStage').querySelectorAll('.pl-ph')].reverse();
   els.forEach((e,k)=>e.classList.toggle('on',k===PL.i)); $('plS').textContent=`${PL.pet.name} · ${PL.i+1} / ${n}`;
   $('plDots').innerHTML=PL.ph.map((_,k)=>`<i class="${k===PL.i?'on':''}"></i>`).join(''); $('plBm').classList.toggle('on',PL.bm.has(PL.i));
