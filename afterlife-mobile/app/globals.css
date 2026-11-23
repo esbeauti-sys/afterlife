@@ -853,3 +853,4 @@ span.i-mail img{width:30px}
 .rg-pop .code-row{display:flex;gap:8px}
 .rg-pop input{flex:1;height:46px;border:1.5px solid #E3A58F;border-radius:12px;background:#FAF6F0;padding:0 16px;font:400 14px var(--serif);color:#4A423C}
 .rg-pop .code-row button{border:0;border-radius:12px;background:#E3A58F;color:#fff;font:600 14px var(--sans);padding:0 16px;cursor:pointer}
+#rgEtcBox[hidden],#rgStarBox[hidden]{display:none!important}
