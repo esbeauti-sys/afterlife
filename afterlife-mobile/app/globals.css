@@ -866,6 +866,7 @@ span.i-mail img{width:30px}
 #player.empty .pl-empty{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:0 34px 120px;text-align:center;position:relative;z-index:2}
 .pl-empty img{width:180px;margin-bottom:14px}
 .pl-empty b{font:500 19px var(--serif);color:#fff}
+#player.empty .pl-bg{display:none}
 #player.empty{background:linear-gradient(#3F4C8E,#8C80BF 70%,#B49CC9)}
 .pl-empty p{font:400 14px/1.6 var(--serif);color:#F6E3DA;margin:0 0 22px}
 .pl-empty .btn{width:100%}
