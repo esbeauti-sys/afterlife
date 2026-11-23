@@ -831,8 +831,9 @@ span.i-mail img{width:30px}
 .rg-type .on{background:#FDE1D6;border-color:#D99B82;color:#8C5A45}
 .rg-q{font:400 19px/1.5 var(--serif);color:#3E3631;text-align:center;margin:24px 0 0}
 .rg-q .hl{color:#D9876A}
-#reg .ymd{display:flex;gap:10px;margin:18px 0 56px}
-.rg-dog{display:flex;justify-content:center;margin:40px 0 0}.rg-dog img{width:210px;animation:rgDog 3.2s ease-in-out infinite;transform-origin:50% 100%}
+#reg .ymd{display:flex;gap:11px;margin:65px 0 65px}
+#reg .ymd select:first-child{flex:0 0 128px}#reg .ymd select{flex:1 1 100px;-webkit-appearance:none;appearance:none;padding:0 38px 0 20px!important;background:#FAF6F0 url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 20 12%27%3E%3Cpath d=%27M2 2l8 8 8-8%27 fill=%27none%27 stroke=%27%23B08876%27 stroke-width=%272.2%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") right 16px center/16px no-repeat!important}
+.rg-dog{display:flex;justify-content:center;margin:64px 0 0;height:142px}.rg-dog img{width:224px;height:142px;object-fit:contain;animation:rgDog 3.2s ease-in-out infinite;transform-origin:50% 100%}
 @keyframes rgDog{0%,100%{transform:rotate(0)}50%{transform:rotate(-2deg) translateY(-3px)}}
 .rg-ic{width:52px;height:52px;margin-bottom:-18px}
 #reg .ymd select{flex:1;height:54px;border-radius:14px;border:1.5px solid #B79C8E;background:#FAF6F0;box-shadow:0 2px 0 rgba(120,90,70,.15);font:400 15px var(--serif);color:var(--brown-500);padding:0 14px}
