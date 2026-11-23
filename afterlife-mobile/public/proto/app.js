@@ -325,7 +325,7 @@ $('dice').onclick=()=>{ const pr=pick(PET_PRESETS); const cols=['#FFFBF4','#F2D3
   dName='나만의 아이'; drawCustom();
 };
 $('charDone').onclick=()=>{
-  if(REG&&REG._custom){ REG.dog=JSON.parse(JSON.stringify(D)); REG._custom=false; back(); setTimeout(drawRgDone,50); return; }
+  if(REG&&REG._custom){ REG.dog=JSON.parse(JSON.stringify(D)); REG._custom=false; back(); return; }
   S.dog={s:JSON.parse(JSON.stringify(D)),n:dName};
   $('charMini').hidden=false; $('charMini').innerHTML=render(D,'mini');
   $('charTxt').innerHTML=`<span></span><small>눌러서 다시 꾸미기</small>`;
@@ -345,11 +345,11 @@ $('skipMemo').onclick=()=>toIsland(null);
 
 /* ---------- 나의 섬 ---------- */
 const SPOTS=[{x:80,b:498},{x:290,b:503},{x:140,b:514},{x:345,b:496}]; // 슬라이드 기준 발끝 위치(px)
-function toIsland(newPet){
+function toIsland(newPet,noMood){
   const cur=NAV[NAV.length-1];
   document.querySelectorAll('.screen').forEach(el=>{el.classList.remove('on','left');});
   $('island').classList.add('on'); NAV=['island']; setTimeout(()=>setIsle(1),0);
-  drawPets(newPet); openMood();
+  drawPets(newPet); if(noMood) setTimeout(()=>checkAnniv(),900); else openMood();
   S.arrived=newPet;
 }
 function wa(w){const c=w.charCodeAt(w.length-1);if(c<0xAC00||c>0xD7A3)return '와';return (c-0xAC00)%28?'과':'와';}
@@ -876,74 +876,56 @@ const jong=w=>{const c=w.charCodeAt(w.length-1);return c>=0xAC00&&c<=0xD7A3&&(c-
 const JS={eul:w=>jong(w)?'을':'를',eun:w=>jong(w)?'은':'는',ga:w=>jong(w)?'이':'가',wa:w=>jong(w)?'과':'와'};
 let REG=null, RS=1;
 function newCode(){ const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s='AL-'; for(let i=0;i<4;i++) s+=c[Math.floor(Math.random()*c.length)]; return s; }
-function openReg(edit){ REG=edit?JSON.parse(JSON.stringify({...edit,dog:edit.dog})):{name:'',type:'dog',breed:'',sex:'',photos:[],rep:0,met:null,yearOnly:false,where:'with',star:null};
-  REG._edit=edit||null; RS=1; $('rgName').value=REG.name; $('rgBreed').value=REG.breed||''; $('rgCode').value=''; $('rgCodeBox').open=false;
-  drawYMD('rgMet',REG.met); drawYMD('rgStar',REG.star&&REG.star.date); $('rgYearOnly').checked=!!REG.yearOnly; drawReg(); go('reg'); }
+function openReg(edit){ REG=edit?JSON.parse(JSON.stringify({...edit,dog:edit.dog})):{name:'',type:'dog',etc:'',breed:'',memo:'',photos:S.photos.slice(0,9),rep:0,met:null,yearOnly:false,where:'with',star:null,mood:null};
+  REG._edit=edit||null; RS=1; $('rgName').value=REG.name; $('rgBreed').value=REG.breed||''; $('rgMemo').value=REG.memo||''; $('rgEtc').value=REG.etc||''; $('rgCode').value='';
+  $('rgPop').classList.toggle('off',!!edit);
+  drawYMD('rgMet',REG.met); drawYMD('rgStar',REG.star&&REG.star.date); drawReg(); go('reg'); }
 function drawYMD(id,val){ const d=val?new Date(val):null; const now=new Date(); const el=$(id);
-  const y=[`<option value="">연도</option>`]; for(let i=now.getFullYear();i>=now.getFullYear()-30;i--) y.push(`<option ${d&&d.getFullYear()===i?'selected':''}>${i}</option>`);
+  const y=[`<option value="">연도</option>`]; for(let i=now.getFullYear();i>=now.getFullYear()-30;i--) y.push(`<option value="${i}" ${d&&d.getFullYear()===i?'selected':''}>${i}년</option>`);
   const m=[`<option value="">월</option>`]; for(let i=1;i<=12;i++) m.push(`<option value="${i}" ${d&&d.getMonth()+1===i?'selected':''}>${i}월</option>`);
   const dd=[`<option value="">일</option>`]; for(let i=1;i<=31;i++) dd.push(`<option value="${i}" ${d&&d.getDate()===i?'selected':''}>${i}일</option>`);
-  el.innerHTML=`<select>${y.join('').replace(/<option( selected)?>(\d+)<\/option>/g,'<option$1 value="$2">$2년</option>')}</select><select>${m.join('')}</select><select>${dd.join('')}</select>`; }
-function readYMD(id,yearOnly){ const [y,m,d]=[...$(id).querySelectorAll('select')].map(s=>s.value); if(!y) return null; return new Date(+y,yearOnly||!m?0:+m-1,yearOnly||!d?1:+d); }
+  el.innerHTML=`<select>${y.join('')}</select><select>${m.join('')}</select><select>${dd.join('')}</select>`; }
+function readYMD(id){ const [y,m,d]=[...$(id).querySelectorAll('select')].map(s=>s.value); if(!y) return null; return new Date(+y,m?+m-1:0,d?+d:1); }
 function drawReg(){
   document.querySelectorAll('.rg-s').forEach(e=>e.classList.toggle('on',+e.dataset.s===RS));
-  $('rgStep').textContent=RS<5?`${RS} / 4`:''; $('rgBar').style.width=(Math.min(RS,4)*25)+'%'; $('rgBar').parentElement.style.visibility=RS<5?'':'hidden';
+  $('rgStep').textContent=`${RS} / 4`;
   const n=REG.name||'아이'; document.querySelectorAll('#reg .nm').forEach(e=>e.textContent=n);
-  ['eul','eun','ga'].forEach(k=>document.querySelectorAll('#reg .'+k).forEach(e=>e.textContent=JS[k](n)));
-  $('rgType').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.t===REG.type));
-  $('rgSex').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===REG.sex));
-  document.querySelectorAll('.rg-opt').forEach(b=>b.classList.toggle('on',b.dataset.w===REG.where)); $('rgStarBox').hidden=REG.where!=='star';
-  $('rgMet').querySelectorAll('select').forEach((s,i)=>s.disabled=i>0&&$('rgYearOnly').checked);
-  const later={2:'나중에 고를게요',3:'나중에 적을게요'}[RS]; $('rgLater').style.display=later?'':'none'; if(later) $('rgLater').textContent=later;
-  $('rgNext').textContent={1:'다음 ›',2:'다음 ›',3:'다음 ›',4:`${n} 섬에 데려가기 ›`,5:'나의 섬으로 가기 ›'}[RS];
-  $('rgLater').classList.toggle('deco',RS===5); if(RS===5){ $('rgLater').style.display=''; $('rgLater').textContent=`🎨 ${n} 모습 꾸미기`; }
-  $('rgNext').disabled=RS===1&&!$('rgName').value.trim();
-  if(RS===2) drawRgPhotos(); if(RS===5) drawRgDone(); $('rgBody').scrollTop=0;
+  ['eul','eun','ga','wa'].forEach(k=>document.querySelectorAll('#reg .'+k).forEach(e=>e.textContent=JS[k](n)));
+  $('rgType').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.t===REG.type)); $('rgEtcBox').hidden=REG.type!=='etc';
+  document.querySelectorAll('#reg .rg-opt').forEach(b=>b.classList.toggle('on',b.dataset.w===REG.where)); $('rgStarBox').hidden=REG.where!=='star';
+  $('rgMood').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.m===REG.mood));
+  const later={2:'기억이 나지 않아요.',3:'오늘은 건너뛸게요.'}[RS]; $('rgLater').style.display=later?'':'none'; if(later) $('rgLater').textContent=later;
+  $('rgNext').textContent={1:'저장하기',2:'다음으로 넘어가기',3:'오늘의 마음 기록하기',4:`${n}${JS.eul(n)} 섬에 데려가기`}[RS];
+  $('rgNext').disabled=(RS===1&&!$('rgName').value.trim())||(RS===3&&!REG.mood);
+  $('rgBody').scrollTop=0;
 }
 $('rgName').oninput=()=>{ REG.name=$('rgName').value.trim(); $('rgNext').disabled=!REG.name; };
 $('rgBreed').oninput=()=>REG.breed=$('rgBreed').value.trim();
-$('rgType').querySelectorAll('button').forEach(b=>b.onclick=()=>{REG.type=b.dataset.t;drawReg();});
-$('rgSex').querySelectorAll('button').forEach(b=>b.onclick=()=>{REG.sex=REG.sex===b.dataset.v?'':b.dataset.v;drawReg();});
-document.querySelectorAll('.rg-opt').forEach(b=>b.onclick=()=>{REG.where=b.dataset.w;drawReg();});
-$('rgYearOnly').onchange=drawReg;
-function drawRgPhotos(){ const g=$('rgGrid'); g.innerHTML=''; const rep=REG.photos[REG.rep];
-  $('rgRep').style.backgroundImage=rep?`url("${rep}")`:''; $('rgRep').classList.toggle('has',!!rep);
-  REG.photos.forEach((u,i)=>{ const d=div('g'+(i===REG.rep?' rep':'')); d.style.backgroundImage=`url("${u}")`; d.onclick=()=>{REG.rep=i;drawRgPhotos();};
-    const x=document.createElement('button'); x.className='x'; x.textContent='×'; x.onclick=e=>{e.stopPropagation();REG.photos.splice(i,1);if(REG.rep>=REG.photos.length)REG.rep=0;drawRgPhotos();}; d.appendChild(x); g.appendChild(d); });
-  const a=document.createElement('label'); a.className='g gadd'; a.htmlFor='rgFile'; a.textContent='+'; g.appendChild(a);
-  const pk=$('rgPickBox'); if(pk) pk.remove(); }
-$('rgFile').onchange=e=>{ const f=[...e.target.files]; if(!f.length)return; const u=f.map(x=>URL.createObjectURL(x)); S.photos=S.photos.concat(u); REG.photos=REG.photos.concat(u).slice(0,9); drawRgPhotos(); e.target.value=''; };
-$('rgFromGal').onclick=()=>{ if(!S.photos.length){ $('rgFile').click(); return; } if($('rgPickBox')){ $('rgPickBox').remove(); return; }
-  const b=div('rg-pick'); b.id='rgPickBox'; S.photos.forEach(u=>{ const d=document.createElement('div'); d.style.backgroundImage=`url("${u}")`; if(REG.photos.includes(u)) d.className='on';
-    d.onclick=()=>{ const i=REG.photos.indexOf(u); if(i>=0) REG.photos.splice(i,1); else if(REG.photos.length<9) REG.photos.push(u); d.classList.toggle('on',REG.photos.includes(u)); const keep=b; drawRgPhotos(); $('rgGrid').after(keep); }; b.appendChild(d); });
-  $('rgGrid').after(b); };
-function regDog(){ if(REG.dog&&REG.dog.sp) return REG.dog; const br=(REG.breed||'').replace(/ /g,''); const hit=br&&PET_PRESETS.find(x=>x[1].replace(/ /g,'').includes(br)||br.includes(x[1].replace(/ /g,''))); const pool=PET_PRESETS.filter(x=>x[0]===REG.type); return JSON.parse(JSON.stringify((hit||pool[REG.type==='dog'?1:0])[2])); }
-function drawRgDone(){ const n=REG.name; const dg=regDog(); REG.dog=dg;
-  $('rgArt').innerHTML=`<div class="mound"></div><div class="pet">${render(dg,'rgd')}</div>${REG.where==='star'?'<span class="st">⭐</span>':''}`;
-  $('rgArt').style.background=REG.where==='star'?'linear-gradient(#5A66A8,#B7A6D3 62%,#7D8DB9 62%)':'';
-  $('rgDoneT').innerHTML=''; $('rgDoneT').append(`${n}${JS.ga(n)} 나의 섬에`); $('rgDoneT').insertAdjacentHTML('beforeend','<br>도착했어요');
-  $('rgDoneD').textContent=REG.where==='star'?`${n}${JS.wa(n)} 함께한 시간을 천천히 꺼내 볼까요?`:`이제 ${n}${JS.wa(n)} 함께한 하루를 하나씩 남겨 볼까요?`;
-  const f=d=>d?(REG.yearOnly&&d===REG.met?`${d.getFullYear()}년`:`${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`):'—';
-  const rows=[['이름',`${n} · ${{dog:'강아지',cat:'고양이',etc:'다른 친구'}[REG.type]}${REG.breed?' · '+REG.breed:''}`],['처음 만난 날',f(REG.met)]];
-  if(REG.where==='star') rows.push(['별이 된 날',f(REG.star&&REG.star.date)]); rows.push(['사진',`${REG.photos.length}장`]);
-  $('rgSum').innerHTML=rows.map(()=>'<div><span></span><b></b></div>').join(''); $('rgSum').querySelectorAll('div').forEach((d,i)=>{d.children[0].textContent=rows[i][0];d.children[1].textContent=rows[i][1];}); }
+$('rgType').querySelectorAll('button').forEach(b=>b.onclick=()=>{REG.type=b.dataset.t;drawReg(); if(REG.type==='etc') setTimeout(()=>$('rgEtc').focus(),50);});
+document.querySelectorAll('#reg .rg-opt').forEach(b=>b.onclick=()=>{REG.where=b.dataset.w;drawReg();});
+$('rgMood').querySelectorAll('button').forEach(b=>b.onclick=()=>{REG.mood=b.dataset.m;setBg(REG.mood);drawReg();});
+$('rgPopX').onclick=()=>$('rgPop').classList.add('off');
+$('rgCode').onkeydown=e=>{ if(e.key==='Enter') $('rgJoin').click(); };
+function regDog(){ if(REG.dog&&REG.dog.sp) return REG.dog; const br=(REG.breed||'').replace(/ /g,''); const t=REG.type==='cat'?'cat':'dog'; const hit=br&&PET_PRESETS.find(x=>x[1].replace(/ /g,'').includes(br)||br.includes(x[1].replace(/ /g,''))); const pool=PET_PRESETS.filter(x=>x[0]===t); return JSON.parse(JSON.stringify((hit||pool[t==='dog'?1:0])[2])); }
+function rgSkipMood(){ return !!REG._edit; }
 $('rgNext').onclick=()=>{ document.activeElement.blur&&document.activeElement.blur(); setTimeout(()=>{
-  if(RS===1){ REG.name=$('rgName').value.trim(); if(!REG.name) return; }
-  if(RS===3){ REG.yearOnly=$('rgYearOnly').checked; REG.met=readYMD('rgMet',REG.yearOnly); }
-  if(RS===4){ REG.star=REG.where==='star'?{on:true,date:readYMD('rgStar'),letter:'',vis:'me'}:null; }
-  if(RS===5){ finishReg(); return; }
+  if(RS===1){ REG.name=$('rgName').value.trim(); if(!REG.name) return; REG.memo=$('rgMemo').value.trim(); REG.etc=$('rgEtc').value.trim(); REG.breed=$('rgBreed').value.trim(); }
+  if(RS===2){ REG.met=readYMD('rgMet'); if(rgSkipMood()){ RS=4; drawReg(); return; } }
+  if(RS===3&&!REG.mood) return;
+  if(RS===4){ REG.star=REG.where==='star'?{on:true,date:readYMD('rgStar'),letter:'',vis:'me'}:null; REG.dog=regDog(); finishReg(); return; }
   RS++; drawReg(); },30); };
-$('rgLater').onclick=()=>{ if(RS===5){ D=JSON.parse(JSON.stringify(REG.dog)); tab='kind'; dName='나만의 아이'; REG._custom=true; drawCustom(); go('custom'); return; } if(RS===3) REG.met=null; RS++; drawReg(); };
-$('rgBack').onclick=()=>{ if(RS>1&&RS<5){ RS--; drawReg(); } else back(); };
+$('rgLater').onclick=()=>{ if(RS===2){ REG.met=null; RS=rgSkipMood()?4:3; } else if(RS===3){ REG.mood=null; setBg(PREV_MOOD||'base'); RS=4; } drawReg(); };
+$('rgBack').onclick=()=>{ if(RS>1){ RS=(RS===4&&rgSkipMood())?2:RS-1; drawReg(); } else back(); };
 $('rgJoin').onclick=()=>{ const c=$('rgCode').value.trim().toUpperCase(); if(!/^AL-[A-Z0-9]{4}$/.test(c)){ toast('AL-로 시작하는 아이 코드를 확인해 주세요'); return; }
   const mine=S.pets.find(p=>p.code===c); if(mine){ toast(`이미 함께하고 있는 ${mine.name}예요`); return; }
   const pet={name:c==='AL-BORI'?'보리':'함께 돌보는 아이',type:'dog',breed:'말티즈',sex:'f',photos:[],rep:0,met:new Date(2015,3,12),where:'with',star:null,dog:JSON.parse(JSON.stringify(PET_PRESETS[3][2])),code:c,shared:true,memo:''};
   S.pets.push(pet); toast(`${pet.name}의 공동 보호자가 되었어요`); toIsland(pet); };
-function finishReg(){ const ed=REG._edit; const data={name:REG.name,type:REG.type,breed:REG.breed,sex:REG.sex,photos:REG.photos,rep:REG.rep,met:REG.met,yearOnly:REG.yearOnly,where:REG.where,star:REG.star,dog:REG.dog};
-  if(ed){ Object.assign(ed,data); toIsland(null); toast('아이 정보를 고쳤어요'); return; }
-  const pet=Object.assign({memo:'',code:newCode()},data); S.pets.push(pet);
-  if(pet.star&&pet.star.on){ setBg('moon'); }
-  toIsland(pet); }
+function finishReg(){ const ed=REG._edit; const data={name:REG.name,type:REG.type,etc:REG.etc,breed:REG.breed,memo:REG.memo,photos:REG.photos,rep:REG.rep,met:REG.met,where:REG.where,star:REG.star,dog:REG.dog};
+  if(ed){ Object.assign(ed,data); toIsland(null,true); toast('아이 정보를 고쳤어요'); return; }
+  const pet=Object.assign({code:newCode()},data); S.pets.push(pet);
+  const m=REG.mood; if(m){ MOOD=m; PREV_MOOD=m; S.moods.push({m,d:new Date()}); $('island').classList.remove('m-sun','m-rain','m-cloud','m-moon'); $('island').classList.add('m-'+m); setBg(m); }
+  else if(pet.star&&pet.star.on){ setBg('moon'); }
+  toIsland(pet,true); if(m) setTimeout(()=>toast(`${MTXT[m]} 마음을 섬에 남겼어요`),700); }
 $('goReg').onclick=()=>openReg(); $('skipGal').onclick=()=>openReg();
 
 

@@ -820,3 +820,36 @@ span.i-mail img{width:30px}
 #houseSlide .hint b{color:#B8683E;font-weight:600}
 .toast{position:absolute;left:50%;bottom:calc(var(--sab) + 190px);transform:translate(-50%,20px);background:rgba(74,66,60,.92);color:#fff;font-family:var(--sans);font-size:14px;padding:10px 18px;border-radius:999px;opacity:0;transition:.3s;pointer-events:none;white-space:nowrap;z-index:50}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+
+#reg .rg-top{padding:10px 26px 0;align-items:center}
+#reg .rg-top .back{margin:0}
+#reg .rg-top span{font:400 15px var(--serif);color:var(--brown-500)}
+#reg .rg-body{padding:14px 26px 10px}
+#reg .q{margin:26px 0 12px}
+#reg .rg-s[data-s="1"] .q:first-of-type{margin-top:8px}
+.rg-type button{background:#FAF6F0;border:1.5px solid #B79C8E;box-shadow:0 2px 0 rgba(120,90,70,.15);font:400 15px var(--serif);color:var(--brown-500)}
+.rg-type .on{background:#FDE1D6;border-color:#D99B82;color:#8C5A45}
+.rg-q{font:400 19px/1.5 var(--serif);color:#3E3631;text-align:center;margin:24px 0 0}
+.rg-q .hl{color:#D9876A}
+#reg .ymd{display:flex;gap:10px;margin:150px 0 70px}
+#reg .ymd select{flex:1;height:54px;border-radius:14px;border:1.5px solid #B79C8E;background:#FAF6F0;box-shadow:0 2px 0 rgba(120,90,70,.15);font:400 15px var(--serif);color:var(--brown-500);padding:0 14px}
+.rg-note{font:400 14px/1.65 var(--serif);color:#B08876;margin:0 0 12px}
+.rg-mood{display:grid;grid-template-columns:1fr 1fr;gap:22px 34px;margin-top:62px}
+.rg-mood button{height:226px;border:0;border-radius:12px;background:#F7F3EC;box-shadow:0 2px 6px rgba(74,66,60,.14);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;cursor:pointer;transition:transform .2s}
+.rg-mood img{width:96px;height:96px;object-fit:contain}
+.rg-mood span{font:500 14px var(--sans);color:#4A423C;background:#F6DED3;border-radius:999px;padding:7px 20px;box-shadow:0 2px 3px rgba(74,66,60,.12)}
+.rg-mood .on{transform:translateY(-3px)}.rg-mood .on span{background:#FFF8F2;border:1.5px solid #D99B82}
+#reg .rg-opt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;width:100%;height:226px;margin:0 0 24px;border:0;border-radius:12px;background:#F7F3EC;box-shadow:0 2px 6px rgba(74,66,60,.14);cursor:pointer;text-align:center}
+#reg .rg-s[data-s="4"] .rg-q{margin-bottom:80px}
+#reg .rg-opt b{font:600 17px var(--sans);color:#D9876A}
+#reg .rg-opt small{font:400 14px/1.7 var(--serif);color:#B08876}
+#reg .rg-opt.on{background:#FDEDE5;box-shadow:0 0 0 1.5px #D99B82,0 2px 6px rgba(74,66,60,.14)}
+#rgStarBox .ymd{margin:0 0 20px}
+.rg-pop{position:relative;background:#FAF6F0;border:2px solid #E3A58F;border-radius:14px;padding:16px 16px 18px;margin:0 0 10px;box-shadow:0 2px 0 rgba(217,135,106,.25)}
+.rg-pop.off{display:none}
+.rg-pop b{font:600 17px var(--sans);color:#D9876A}
+.rg-pop p{font:500 13.5px var(--sans);color:#4A423C;margin:22px 0 10px}
+.rg-pop .x{position:absolute;top:8px;right:10px;border:0;background:none;font-size:24px;color:#B08876;cursor:pointer}
+.rg-pop .code-row{display:flex;gap:8px}
+.rg-pop input{flex:1;height:46px;border:1.5px solid #E3A58F;border-radius:12px;background:#FAF6F0;padding:0 16px;font:400 14px var(--serif);color:#4A423C}
+.rg-pop .code-row button{border:0;border-radius:12px;background:#E3A58F;color:#fff;font:600 14px var(--sans);padding:0 16px;cursor:pointer}
