@@ -187,7 +187,7 @@ document.addEventListener('click',e=>{
   const g=e.target.closest('[data-go]'); if(g){ go(g.dataset.go); return; }
   if(e.target.closest('[data-back]')) back();
 });
-setTimeout(()=>{ if(NAV.length===1&&NAV[0]==='splash') go('login'); },4500);
+// 스플래시는 탭해야 넘어감
 
 function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2200);}
 
