@@ -968,3 +968,12 @@ span.i-mail img{width:30px}
 .lg-go .paws i:nth-child(2){animation-delay:.25s;transform:translateY(-4px)}.lg-go .paws i:nth-child(3){animation-delay:.5s}
 @keyframes paw{0%,100%{opacity:.15}40%{opacity:1}}
 #login{cursor:pointer}
+#gallery .ga-h{margin-top:64px!important;font-size:19px;color:#D9876A;opacity:0}
+#gallery .ga-c{margin-top:18px;line-height:1.85}
+.ln{display:inline-block;opacity:0;transform:translateY(6px)}
+.screen.on .ln{animation:lgIn .8s var(--d,0s) ease forwards}
+#gallery.on .ga-h{animation:lgIn .8s .1s ease forwards}
+#gallery .illu img{opacity:0;transform:translateY(14px)}
+#gallery.on .illu img{animation:lgIn .9s 1.9s ease forwards}
+#gallery .btn,#gallery .link{opacity:0}
+#gallery.on .btn,#gallery.on .link{animation:lgIn .6s 2.4s ease forwards}

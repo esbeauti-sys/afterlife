@@ -197,7 +197,7 @@ function lgNext(){ clearTimeout(lgT); if(NAV[NAV.length-1]!=='login') return; S.
 new MutationObserver(()=>{ if($('login').classList.contains('on')&&NAV[NAV.length-1]==='login'){ clearTimeout(lgT); lgT=setTimeout(lgNext,3600); } }).observe($('login'),{attributes:true,attributeFilter:['class']});
 $('login').addEventListener('click',()=>{ if(NAV[NAV.length-1]==='login') lgNext(); });
 function setWelcome(){
-  $('welcome').innerHTML = S.guardian ? `환영합니다. <span class="name-hl"></span> 보호자님.` : '환영합니다. 보호자님.';
+  $('welcome').innerHTML = S.guardian ? `환영해요, <span class="name-hl"></span> 보호자님.` : '환영해요, 보호자님.';
   if(S.guardian) $('welcome').querySelector('.name-hl').textContent=S.guardian;
 }
 
