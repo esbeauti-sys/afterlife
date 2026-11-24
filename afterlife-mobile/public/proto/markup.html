@@ -230,7 +230,7 @@
   <section class="screen" id="profile">
     <button class="back" data-tabhome><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button>
     <div class="scroll pf-body">
-      <div class="pf-card" id="pfCard"></div>
+      <div class="pf-isl" id="pfCard"></div><h2 class="pf-h">나의 프로필 캐릭터</h2>
       <div class="q"><span>1.</span>기본 정보를 설정해주세요.</div>
       <div class="pf-row"><label>이름</label><div class="rough field"><input id="pfName" maxlength="10" autocomplete="off"></div></div>
       <div class="pf-row"><label>아이디</label><div class="rough field"><input id="pfId" maxlength="16" placeholder="영문으로 작성해주세요." autocomplete="off" autocapitalize="off"></div></div>
@@ -244,6 +244,28 @@
       <div style="height:200px"></div>
     </div>
     <div class="fix-foot"><button class="rough btn" id="pfSave">저장하기</button></div>
+    <nav class="tabbar"></nav>
+  </section>
+
+  <!-- 감정 기록 -->
+  <section class="screen" id="emo">
+    <div class="em-bg"></div>
+    <div class="em-ov" id="emOv">
+      <header class="i-head"><span style="width:44px"></span><img class="i-logo" src="/img/logo-s.png" alt="AFTER LIFE"><span class="i-mail"><img src="/img/mail.png" alt=""></span></header>
+      <p class="em-ym" id="emYm"></p><h2 class="em-h">한 달간 보호자님 마음의 날씨는..</h2>
+      <div class="em-bub" id="emBub"></div>
+      <p class="em-tip">비눗방울을 누르면 한 달의 기록을 자세히 볼 수 있어요.</p>
+    </div>
+    <div class="em-dt" id="emDt">
+      <button class="back" id="emBack"><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button>
+      <div class="scroll em-sc">
+        <h2 class="em-t" id="emT"></h2><p class="em-d" id="emD"></p>
+        <div class="em-mon"><button class="rough em-pick" id="emPick"></button></div>
+        <div class="rough em-cal"><div class="em-wk"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="em-days" id="emDays"></div></div>
+        <div class="rough em-flow"><b>주간 흐름</b><div class="em-fl" id="emFl"></div></div>
+        <div style="height:130px"></div>
+      </div>
+    </div>
     <nav class="tabbar"></nav>
   </section>
 

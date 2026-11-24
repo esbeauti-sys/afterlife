@@ -538,9 +538,9 @@ const TABS_=[['set','설정','GEAR'],
  ['comm','커뮤니티','<path fill="currentColor" d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-.9 0-1.8-.1-2.6-.3L5 20l1-3.6C4.2 15 3 13.1 3 10.9 3 6.8 7 3.5 12 3.5z"/><g fill="#FAF6F0"><circle cx="8.3" cy="11" r="1.3"/><circle cx="12" cy="11" r="1.3"/><circle cx="15.7" cy="11" r="1.3"/></g>'],
  ['isle','나의 섬','<g fill="currentColor"><ellipse cx="6" cy="10" rx="2.2" ry="2.8"/><ellipse cx="10" cy="6.3" rx="2.2" ry="2.9"/><ellipse cx="14.4" cy="6.3" rx="2.2" ry="2.9"/><ellipse cx="18.2" cy="10" rx="2.2" ry="2.8"/><path d="M12.1 11.2c2.6 0 5.6 3.8 5.6 6 0 1.9-1.5 2.6-3 2.6-1 0-1.7-.5-2.6-.5s-1.6.5-2.6.5c-1.5 0-3-.7-3-2.6 0-2.2 3-6 5.6-6z"/></g>'],
  ['store','저장소','<path fill="currentColor" d="M3 6.5A2 2 0 0 1 5 4.5h4.2l2 2.2H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'],
- ['prof','프로필','<g fill="currentColor"><circle cx="12" cy="7.8" r="4.3"/><path d="M3.8 20.5c0-4.3 3.7-7.3 8.2-7.3s8.2 3 8.2 7.3z"/></g>']];
-const ICN={set:'gear',comm:'ic-comm',isle:'ic-paw',store:'ic-store',prof:'ic-prof'};
-const TAB_OF={room:'store',player:'isle',room:'store',leave:'comm',profile:'prof',settings:'set',island:'isle',comm:'comm',feed:'comm',shelf:'store',albumNew:'store',albumView:'store'};
+ ['emo','감정 기록','']];
+const ICN={set:'gear',comm:'ic-comm',isle:'ic-paw',store:'ic-store',emo:'ic-emo'};
+const TAB_OF={room:'store',player:'isle',room:'store',leave:'comm',profile:'set',settings:'set',emo:'emo',island:'isle',comm:'comm',feed:'comm',shelf:'store',albumNew:'store',albumView:'store'};
 function buildTabbars(){ document.querySelectorAll('nav.tabbar').forEach(nav=>{
   const scr=nav.closest('.screen').id; const act=scr==='ph'?PH_TAB:scr==='island'?['comm','isle','store'][typeof ISI==='number'?ISI:1]:TAB_OF[scr]||'isle';
   nav.innerHTML='<i class="blob"></i>'+TABS_.map(([k,n,ic])=>`<button data-k="${k}" class="${k===act?'on':''}"><i class="ti" style="--a:url(/img/${ICN[k]}.png);--b:url(/img/${ICN[k]}-on.png)"></i><span>${n}</span></button>`).join('');
@@ -557,8 +557,8 @@ function showOnly(id){
 }
 function tabGo(k){ if(k==='isle'||k==='store'){ if(NAV[NAV.length-1]!=='island') showOnly('island'); NAV=['island']; setTimeout(()=>setIsle(k==='store'?2:1,true),30); }
   else if(k==='comm'){ showOnly('comm'); NAV=['island','comm']; openComm(); } 
-  else if(k==='prof'){ openProfile(); showOnly('profile'); NAV=['island','profile']; }
-  else { openSettings(); showOnly('settings'); NAV=['island','settings']; }
+  else if(k==='emo'){ openEmo(); showOnly('emo'); NAV=['island','emo']; }
+  else { SM='home'; openSettings.keep=true; openSettings(); showOnly('settings'); NAV=['island','settings']; }
   setTimeout(buildTabbars,420); }
 buildTabbars();
 
@@ -739,7 +739,7 @@ function drawDates(){ const w=$('stDates'); w.innerHTML='';
 $('stNo').onclick=()=>$('stModal').classList.remove('on');
 $('stYes').onclick=()=>{ const i=S.stPet||0; const pet=S.pets[i]; S.pets.splice(i,1); S.stPet=0; $('stModal').classList.remove('on'); drawPets(); toast(`${pet.name}${eunneun(pet.name)} 섬을 떠났어요`); SM='list'; openSettings(); };
 function applyBlur(){ const pet=S.pets[0]; const v=pet&&pet.cfg?pet.cfg.calm:100; document.documentElement.style.setProperty('--pblur',Math.max(2,(100-v)/100*8).toFixed(1)+'px'); }
-document.querySelectorAll('[data-tabhome]').forEach(b=>b.onclick=()=>{ if(b.closest('#settings')&&SM==='edit'){ SM='list'; drawSt(); return; } tabGo('isle'); });
+document.querySelectorAll('[data-tabhome]').forEach(b=>b.onclick=()=>{ if(b.closest('#settings')){ if(SM==='edit'){ SM='list'; drawSt(); return; } if(SM==='list'){ SM='home'; drawSt(); return; } } if(b.closest('#profile')){ SM='home'; openSettings.keep=true; openSettings(); showOnly('settings'); NAV=['island','settings']; return; } tabGo('isle'); });
 
 
 /* ---------- 사운드 ---------- */
@@ -1111,3 +1111,97 @@ $('plEdit').onclick=openEdit;
 $('mail').onclick=()=>openDiary();
 document.querySelectorAll('span.i-mail').forEach(m=>{m.style.cursor='pointer';m.onclick=()=>openDiary();});
 
+
+/* ===== 새 반려동물 캐릭터 (피그마 벡터 키트 기반) ===== */
+const PMETA=[[241,247],[166,169],[177,236],[212,167],[180,206],[157,178],[178,258],[178,215],[186,221],[218,193],[177,255],[196,156],[224,250],[160,223],[160,230],[170,235],[176,241]];
+const BREEDS=[['dog','골든 리트리버',0],['dog','웰시코기',1],['dog','푸들',2],['dog','닥스훈트',3],['dog','시바 · 진돗개',4],['dog','프렌치 불독',5],['dog','래브라도',6],['dog','코커 스패니얼',7],['dog','슈나우저',8],['dog','포메라니안',9],['dog','셔틀랜드 쉽독',10],['dog','시츄',11],['cat','페르시안',12],['cat','코리안 숏헤어',13],['cat','스코티시 폴드',14],['cat','데본렉스',15],['cat','아메리칸 숏헤어',16]];
+const PCOL=[['#FEEEDF','크림'],['#FEE3C2','버터'],['#FED0A8','살구'],['#EED2C2','베이지'],['#D6ACA1','코코아'],['#C7B8BB','그레이'],['#8A8A8A','차콜']];
+const PPAT=[['none','없음'],['spot','점박이'],['back','등무늬'],['chest','가슴무늬']];
+const PPC=['#FED0A8','#E5B6A4','#B98B78','#FFF8EF','#6E6464'];
+const PACC2=[[-1,'없음'],[0,'뼈다귀'],[1,'고깔모자'],[2,'노란 모자'],[3,'리본'],[4,'물고기'],[5,'공']];
+function petL(o){ const b=o.br|0, m=PMETA[b]||[200,200], u=k=>`url(/img/pet2/${b}_${k}.png)`;
+  let h=`<span class="pv" style="aspect-ratio:${m[0]}/${m[1]}"><i style="--m:${u('mask')};--c:${o.col||'#FEEEDF'}"></i>`;
+  if(o.pat&&o.pat!=='none') h+=`<i style="--m:${u(o.pat)};--c:${o.pc||'#E5B6A4'}"></i>`;
+  h+=`<i style="--m:${u('line')};--c:#5A3A3A"></i>`;
+  if(o.acc2>=0) h+=`<em style="--m:${u('a'+o.acc2)}"></em>`;
+  return h+'</span>'; }
+const _render2=render; render=function(o,id){ if(o&&o.br!==undefined) return petL(o); return _render2(o,id); };
+function breedFor(type,breed){ const q=(breed||'').replace(/\s/g,''); if(q){ const hit=BREEDS.find(x=>x[1].replace(/\s/g,'').split('·').some(t=>t.includes(q)||q.includes(t))); if(hit) return hit[2]; }
+  return type==='cat'?13:1; }
+regDog=function(){ if(REG.dog&&REG.dog.br!==undefined) return REG.dog; return {br:breedFor(REG.type,REG.breed),col:REG.type==='cat'?'#FEE3C2':'#FED0A8',pat:'none',pc:'#E5B6A4',acc2:-1}; };
+let CZT='br', CZ_PET=null;
+drawCustom=function(){ if(!D||D.br===undefined) D={br:1,col:'#FED0A8',pat:'none',pc:'#E5B6A4',acc2:-1};
+  $('cPreview').innerHTML=petL(D);
+  const T=[['br','품종'],['col','털 색'],['pat','무늬'],['acc','소품']];
+  $('tabs').innerHTML=T.map(([k,n])=>`<button class="tab${CZT===k?' on':''}" data-tab="${k}">${n}</button>`).join('');
+  $('tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>{CZT=b.dataset.tab;drawCustom();$('panel').scrollTop=0;});
+  const p=$('panel'); p.innerHTML='';
+  const grid=(items,isOn,mk,set)=>{ const g=div('cz-g'); items.forEach(it=>{ const t=document.createElement('button'); t.className='cz-t'+(isOn(it)?' on':''); t.innerHTML=petL(mk(it))+`<span>${it[1]}</span>`; t.onclick=()=>{ set(it); drawCustom(); }; g.appendChild(t); }); p.appendChild(g); };
+  const sw=(title,arr,k)=>{ h3(p,title); const w=div('cz-sw'); arr.forEach(c=>{ const b=document.createElement('button'); b.style.background=c; b.className=D[k]===c?'on':''; b.onclick=()=>{D[k]=c;drawCustom();}; w.appendChild(b); }); p.appendChild(w); };
+  if(CZT==='br'){ [['dog','강아지'],['cat','고양이']].forEach(([t,n])=>{ h3(p,n); grid(BREEDS.filter(x=>x[0]===t),it=>D.br===it[2],it=>Object.assign({},D,{br:it[2],acc2:-1}),it=>{D.br=it[2];}); }); }
+  if(CZT==='col'){ h3(p,'우리 아이 털 색에 가깝게 골라 보세요'); grid(PCOL,it=>D.col===it[0],it=>Object.assign({},D,{col:it[0]}),it=>{D.col=it[0];}); }
+  if(CZT==='pat'){ grid(PPAT,it=>(D.pat||'none')===it[0],it=>Object.assign({},D,{pat:it[0]}),it=>{D.pat=it[0];}); if(D.pat&&D.pat!=='none') sw('무늬 색',PPC,'pc'); }
+  if(CZT==='acc'){ grid(PACC2,it=>(D.acc2??-1)===it[0],it=>Object.assign({},D,{acc2:it[0]}),it=>{D.acc2=it[0];}); }
+};
+$('dice').onclick=()=>{ const r=a=>a[Math.floor(Math.random()*a.length)]; D={br:D&&D.br!==undefined&&Math.random()<.5?D.br:r(BREEDS)[2],col:r(PCOL)[0],pat:r(PPAT)[0],pc:r(PPC),acc2:r(PACC2)[0]}; drawCustom(); };
+{ const od=$('charDone').onclick; $('charDone').onclick=()=>{ if(CZ_PET){ CZ_PET.dog=JSON.parse(JSON.stringify(D)); CZ_PET=null; back(); setTimeout(()=>{ drawPets(); drawSt(); },60); toast('모습을 바꿨어요'); return; } od(); }; }
+function openCZ(pet){ CZ_PET=pet; D=pet.dog&&pet.dog.br!==undefined?JSON.parse(JSON.stringify(pet.dog)):regDogFor(pet); CZT='br'; drawCustom(); go('custom'); }
+function regDogFor(p){ return {br:breedFor(p.type,p.breed),col:'#FED0A8',pat:'none',pc:'#E5B6A4',acc2:-1}; }
+// 기존 아이도 새 그림체로
+{ const dp=drawPets; drawPets=function(np){ upPets(); dp(np); }; }
+function upPets(){ S.pets.forEach(p=>{ if(!p.dog||p.dog.br===undefined) p.dog=regDogFor(p); }); }
+
+/* ===== 설정 홈 (22) / 아이 목록 (23) ===== */
+const _drawSt=drawSt;
+drawSt=function(){ upPets(); const b=$('stBody'); const old=$('stCnt'); if(old) old.remove();
+  if(SM==='home'){ $('settings').classList.remove('editing'); const p0=S.pets[0];
+    b.innerHTML=`<h2 class="sh-h">어떤 걸 편집하고 싶으신가요?</h2>
+    <button class="sh-c" id="shPet"><span class="art"><img src="/img/isl1.png" alt=""><span class="pet">${p0?petL(p0.dog):''}</span></span><b>반려동물 캐릭터</b><small>나의 섬에 있는 아이들의 캐릭터 모습과<br>정보를 수정할 수 있어요.</small></button>
+    <button class="sh-c" id="shMe"><span class="art"><img src="/img/isl3.png" alt=""><span class="per">${renderP(S.me.p)}</span></span><b>내 캐릭터</b><small>커뮤니티에서 보여지는 나의 캐릭터 모습과<br>소개글을 수정할 수 있어요.</small></button><div style="height:120px"></div>`;
+    $('shPet').onclick=()=>{ SM='list'; drawSt(); };
+    $('shMe').onclick=()=>{ openProfile(); go('profile'); };
+    b.scrollTop=0; return; }
+  if(SM==='list'||!S.pets[S.stPet||0]){ SM='list'; $('settings').classList.remove('editing'); const p0=S.pets[0];
+    const c=document.createElement('span'); c.className='st-cnt'; c.id='stCnt'; c.textContent=`${S.pets.length} 마리`; $('settings').appendChild(c);
+    b.innerHTML=`<div class="pl-head"><div class="art"><img src="/img/isl1.png" alt="">${p0?`<span class="pet">${petL(p0.dog)}</span><span class="ptg"></span>`:''}</div><h2>나의 섬에 있는 아이들</h2><p>아이 코드를 공유하면 공동 보호자로 함께 기록할 수 있어요.</p></div><div id="petsRow"></div><div style="height:130px"></div>`;
+    if(p0) b.querySelector('.ptg').textContent=p0.name;
+    const r=$('petsRow');
+    S.pets.forEach((p,i)=>{ const c=div('rough pc2'); c.innerHTML=`<div class="th">${petL(p.dog)}</div><div><b class="nm2"></b><small class="bd2"></small><br><button class="code"></button></div><button class="more" aria-label="메뉴">···</button><div class="pc2-menu"><button data-a="look">모습 꾸미기</button><button data-a="info">기본 정보 고치기</button><button data-a="rec">기록 설정</button></div>`;
+      c.querySelector('.nm2').textContent=(p.star&&p.star.on?'⭐ ':'')+p.name; c.querySelector('.bd2').textContent=p.breed||{dog:'강아지',cat:'고양이',etc:'다른 친구'}[p.type]||'';
+      c.querySelector('.code').textContent='코드 '+(p.code||(p.code=newCode()));
+      c.querySelector('.code').onclick=()=>{ try{navigator.clipboard.writeText(p.code);}catch(e){} toast(`${p.code} 코드를 복사했어요. 가족에게 보내 주세요`); };
+      const mn=c.querySelector('.pc2-menu'); c.querySelector('.more').onclick=e=>{ e.stopPropagation(); document.querySelectorAll('.pc2-menu').forEach(x=>x!==mn&&x.classList.remove('on')); mn.classList.toggle('on'); };
+      mn.querySelectorAll('button').forEach(x=>x.onclick=()=>{ mn.classList.remove('on'); const a=x.dataset.a; if(a==='look') openCZ(p); else if(a==='info'){ NAV=['island','settings']; openReg(p); } else { S.stPet=i; SM='edit'; openSettings.keep=true; openSettings(); } });
+      c.querySelector('.th').onclick=()=>openCZ(p); r.appendChild(c); });
+    const a=document.createElement('button'); a.className='pc-addbar'; a.innerHTML='<span>+</span> 우리 아이 추가하기'; a.onclick=()=>{ if(S.pets.length>=4){ toast('지금은 네 마리까지 함께할 수 있어요'); return; } NAV=['island','settings']; openReg(); }; r.appendChild(a);
+    b.scrollTop=0; return; }
+  _drawSt(); };
+drawPf=function(){ $('pfCard').innerHTML=`<img src="/img/isl3.png" alt=""><span class="per">${renderP(S.me.p)}</span>`; };
+
+/* ===== 감정 기록 (25/26) ===== */
+const MIMG={sun:'/img/sun.png',rain:'/img/rain.png',cloud:'/img/cloud.png',moon:'/img/moon.png'};
+function emoData(){ const now=new Date(), y=now.getFullYear(), mo=now.getMonth(); const days={};
+  (S.moods||[]).forEach(m=>{ const d=new Date(m.d); if(d.getFullYear()===y&&d.getMonth()===mo) days[d.getDate()]=m.m; });
+  if(Object.keys(days).length<4){ const seq='sun moon sun cloud sun sun rain cloud moon sun sun sun cloud rain sun moon sun sun moon cloud'.split(' '); for(let d=1;d<now.getDate();d++) if(!days[d]) days[d]=seq[(d*7)%seq.length]; }
+  return {y,mo,days}; }
+let EMO=null;
+function openEmo(){ EMO=emoData(); $('emo').classList.remove('dt'); const {y,mo,days}=EMO; $('emYm').textContent=`${y}년 ${mo+1}월`;
+  const cnt={sun:0,moon:0,cloud:0,rain:0}; Object.values(days).forEach(m=>cnt[m]=(cnt[m]||0)+1); const tot=Object.values(cnt).reduce((a,b)=>a+b,0)||1;
+  const order=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]); const pos=[[200,150],[305,265],[95,275],[215,350]];
+  $('emBub').innerHTML=''; order.forEach((k,i)=>{ const sz=Math.round(90+120*Math.sqrt(cnt[k]/tot)); const b=document.createElement('button'); b.className='em-b'; b.style.cssText=`width:${sz}px;height:${sz}px;left:${pos[i][0]-sz/2}px;top:${pos[i][1]-sz/2}px;animation-delay:${-i*1.3}s`;
+    b.innerHTML=`<img src="${MIMG[k]}" alt="">`; b.title=`${MTXT[k]} 날 ${cnt[k]}일`; b.onclick=()=>openEmoDt(); $('emBub').appendChild(b); }); }
+function openEmoDt(){ const {y,mo,days}=EMO; $('emo').classList.add('dt');
+  const cnt={sun:0,moon:0,cloud:0,rain:0}; Object.values(days).forEach(m=>cnt[m]++); const top=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0];
+  const T={sun:'맑은 날이 가장 많았던 한 달이었어요.',moon:'그리운 마음이 자주 찾아온 한 달이었어요.',cloud:'잔잔하고 덤덤한 날이 많았던 한 달이었어요.',rain:'마음이 무거운 날이 조금 많았던 한 달이었어요.'};
+  const Dd={sun:'비가 내린 날에도 다시 해가 떠오르며, 함께한 순간들이 조금씩 따뜻한 기억으로 쌓여 가고 있어요.',moon:'그리움은 함께한 시간이 깊었다는 뜻이에요. 그리운 날엔 사진을 꺼내 천천히 이야기를 나눠 보세요.',cloud:'큰 파도 없이 지나간 날들도 소중한 기록이에요. 조용히 마음을 들여다본 시간이 쌓여 가고 있어요.',rain:'무거운 날이 이어질 땐 혼자 견디지 않아도 괜찮아요. 함께 기억하는 섬에서 마음을 나눠 보세요.'};
+  $('emT').textContent=T[top]; $('emD').textContent=Dd[top];
+  $('emPick').textContent=new Date(y,mo,1).toLocaleString('en-US',{month:'short'})+` ${y}  ⌄`;
+  const first=new Date(y,mo,1).getDay(), n=new Date(y,mo+1,0).getDate(), today=new Date().getDate(); let h=''; for(let i=0;i<first;i++) h+='<i></i>';
+  for(let d=1;d<=n;d++){ const m=days[d]; h+=m?`<i class="${d===today?'t':''}" title="${d}일"><img src="${MIMG[m]}" alt=""></i>`:`<i class="e"><span>${d}</span></i>`; }
+  $('emDays').innerHTML=h;
+  const wk=[]; for(let w=0;w<5;w++){ const c={}; for(let d=w*7+1;d<=Math.min(n,w*7+7);d++) if(days[d]) c[days[d]]=(c[days[d]]||0)+1; const t=Object.keys(c).sort((a,b)=>c[b]-c[a])[0]; if(t) wk.push([w+1,t]); }
+  $('emFl').innerHTML=wk.slice(0,5).map(([w,t])=>`<div><span class="em-b"><img src="${MIMG[t]}" alt=""></span>${w}주차</div>`).join('');
+  $('emo').querySelector('.em-sc').scrollTop=0; }
+$('emBack').onclick=()=>$('emo').classList.remove('dt');
+$('emPick').onclick=()=>toast('지난 달 기록은 기록이 쌓이면 볼 수 있어요');
+setTimeout(()=>{ try{ buildTabbars(); }catch(e){} },0);
