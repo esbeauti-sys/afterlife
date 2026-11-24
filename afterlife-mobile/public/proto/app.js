@@ -192,8 +192,10 @@ setTimeout(()=>{ if(NAV.length===1&&NAV[0]==='splash') go('login'); },4500);
 function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2200);}
 
 /* ---------- login ---------- */
-$('google').onclick=()=>{ S.guardian='하루'; setWelcome(); go('gallery'); };
-$('guest').onclick=()=>{ S.guardian=null; setWelcome(); go('gallery'); };
+let lgT=null;
+function lgNext(){ clearTimeout(lgT); if(NAV[NAV.length-1]!=='login') return; S.guardian=null; setWelcome(); go('gallery'); }
+new MutationObserver(()=>{ if($('login').classList.contains('on')&&NAV[NAV.length-1]==='login'){ clearTimeout(lgT); lgT=setTimeout(lgNext,3600); } }).observe($('login'),{attributes:true,attributeFilter:['class']});
+$('login').addEventListener('click',()=>{ if(NAV[NAV.length-1]==='login') lgNext(); });
 function setWelcome(){
   $('welcome').innerHTML = S.guardian ? `환영합니다. <span class="name-hl"></span> 보호자님.` : '환영합니다. 보호자님.';
   if(S.guardian) $('welcome').querySelector('.name-hl').textContent=S.guardian;

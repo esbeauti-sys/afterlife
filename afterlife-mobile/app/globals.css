@@ -955,3 +955,16 @@ span.i-mail img{width:30px}
 #player .pl-pop .sh-opts{gap:6px}
 #player #plSp button{height:40px!important;min-height:0!important;padding:0!important;font:600 14px var(--sans)!important;flex:none!important;width:78px;line-height:36px}
 #player #plSp button:nth-child(2){width:64px}
+#login .lg-c{margin-top:96px!important;line-height:1.85}
+#login .lg-c span{display:inline-block;opacity:0;transform:translateY(6px)}
+#login.on .lg-c span{animation:lgIn .8s ease forwards}
+#login.on .lg-c span:nth-of-type(2){animation-delay:.5s}#login.on .lg-c span:nth-of-type(3){animation-delay:1.1s}
+@keyframes lgIn{to{opacity:1;transform:none}}
+.lg-go{position:relative;z-index:1;margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:10px;padding-bottom:34px;opacity:0}
+#login.on .lg-go{animation:lgIn .6s 1.5s ease forwards}
+.lg-go small{font:400 13px var(--serif);color:var(--brown-500)}
+.lg-go .paws{display:flex;gap:10px}
+.lg-go .paws i{width:14px;height:14px;opacity:.15;background:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cg fill=%27%23D99B82%27%3E%3Cellipse cx=%276%27 cy=%2710%27 rx=%272.2%27 ry=%272.8%27/%3E%3Cellipse cx=%2710%27 cy=%276.3%27 rx=%272.2%27 ry=%272.9%27/%3E%3Cellipse cx=%2714.4%27 cy=%276.3%27 rx=%272.2%27 ry=%272.9%27/%3E%3Cellipse cx=%2718.2%27 cy=%2710%27 rx=%272.2%27 ry=%272.8%27/%3E%3Cpath d=%27M12.1 11.2c2.6 0 5.6 3.8 5.6 6 0 1.9-1.5 2.6-3 2.6-1 0-1.7-.5-2.6-.5s-1.6.5-2.6.5c-1.5 0-3-.7-3-2.6 0-2.2 3-6 5.6-6z%27/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat;animation:paw 1.5s infinite}
+.lg-go .paws i:nth-child(2){animation-delay:.25s;transform:translateY(-4px)}.lg-go .paws i:nth-child(3){animation-delay:.5s}
+@keyframes paw{0%,100%{opacity:.15}40%{opacity:1}}
+#login{cursor:pointer}
