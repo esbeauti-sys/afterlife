@@ -947,3 +947,11 @@ span.i-mail img{width:30px}
 #player.empty{background:#FCE9DF}
 #player.empty .pl-empty b{color:#3E3631}#player.empty .pl-empty p{color:#B08876}
 #player.empty .pl-s{display:none}
+#player .pl-ctl{left:26px;right:auto;width:351px;height:54px;box-sizing:border-box;bottom:calc(var(--sab) + 110px);padding:7px 15px 7px 9px;gap:9px}
+#player .pl-ctl button{height:40px;padding:0 12px 0 6px;gap:10px;font:600 14px var(--sans)}
+#plPause{flex:0 0 194px!important}#plSpeed{flex:0 0 124px!important}
+#plPause i,#plSpeed i{width:28px;height:28px}
+#player .pl-pop{right:auto;left:124px;width:253px;height:54px;box-sizing:border-box;bottom:calc(var(--sab) + 49px);padding:7px 10px 7px 11px}
+#player .pl-pop .sh-opts{gap:6px}
+#player #plSp button{height:40px!important;min-height:0!important;padding:0!important;font:600 14px var(--sans)!important;flex:none!important;width:78px;line-height:36px}
+#player #plSp button:nth-child(2){width:64px}
