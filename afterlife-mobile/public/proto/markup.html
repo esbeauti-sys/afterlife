@@ -112,7 +112,7 @@
   <section class="screen" id="island">
     <header class="i-head" id="ihead"><button class="music" id="music" aria-label="음악"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M9 18V5l11-2v13" fill="none" stroke="#4A423C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.6" fill="#4A423C"/><circle cx="17.5" cy="16" r="2.6" fill="#4A423C"/></svg><i></i></button>
       <img class="i-logo" src="/img/logo-s.png" alt="AFTER LIFE">
-      <button class="i-mail" id="mail" aria-label="오늘의 쪽지"><img src="/img/mail.png" alt=""><i class="dot" id="mailDot"></i></button>
+      <button class="i-mail" id="mail" aria-label="오늘의 쪽지"><img src="/img/mail.png" alt=""><i class="dot" id="mailDot"></i><b class="mail-n" id="mailN"></b></button>
     </header>
     <div class="bg" id="bgA"></div><div class="bg" id="bgB"></div><div class="bg-rain" id="bgRain"></div><div class="fx">
       <div class="cloud c1"></div><div class="cloud c2"></div>
@@ -122,7 +122,7 @@
     </div>
     <div class="isles" id="isles">
       <div class="slide" id="commSlide"><button class="isl-btn" id="toComm">함께 기억하는 섬</button><p class="sw-hint">‹ 옆으로 넘기면 커뮤니티로 이동해요</p><div class="isle"><img class="iimg i3" src="/img/isl3.png" alt="돌탑 언덕"></div></div>
-      <div class="slide"><div class="isle" id="isle"><img class="iimg" src="/img/isl1.png" alt="추모 섬"></div></div>
+      <div class="slide"><div class="isle" id="isle"><img class="iimg" src="/img/isl1.png" alt="나의 섬"></div></div>
       <div class="slide" id="houseSlide"><button class="isl-btn store-btn">기억을 저장하는 섬</button><div class="isle"><img class="iimg i2" src="/img/isl2.png" alt="기억의 집"><div class="house-hit"><i class="sp s1"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i><i class="sp s2"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i><i class="sp s3"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i><i class="sp s4"><svg viewBox="0 0 20 20"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0Z" fill="#FFF6D6"/></svg></i><span class="glow"></span></div></div><div class="rough hint">집을 터치해서 안으로 들어가보세요.<br>그동안 저장한 사진과 글을 볼 수 있어요.</div></div>
     </div>
     
@@ -130,8 +130,7 @@
     <nav class="tabbar"></nav>
     <div class="mood-dim" id="moodDim"></div>
     <div class="mood" id="mood">
-      <div class="handle"></div>
-      <button class="back" id="moodBack"><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button>
+      <button class="m-x" id="moodBack" aria-label="닫기">×</button>
       <p class="copy mq">오늘의 마음은 어떤 날씨같나요?</p>
       <div class="mgrid" id="mgrid">
         <button class="mc" data-m="sun"><img src="/img/sun.png" alt=""><span>평온해요</span></button>
@@ -178,7 +177,7 @@
     <header class="i-head s-head"><button class="back hb" data-back><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button><img class="i-logo" src="/img/logo-s.png" alt="AFTER LIFE"></header>
     <div class="books" id="books"></div>
     <div class="floor"><svg viewBox="0 0 402 220" preserveAspectRatio="none"><g fill="none" stroke="#4A423C" stroke-width="1.3" stroke-linecap="round" opacity=".55"><path d="M0 12 Q30 9 48 13"/><path d="M360 40 q22 -6 42 0"/><path d="M262 110 q-20 4 -10 14 q22 6 46 -4 q8 -10 -12 -12 q-14 -2 -24 2"/><path d="M325 107 l8 -1"/><path d="M370 140 q18 2 32 -4"/><path d="M10 64 q6 2 4 8"/></g></svg></div>
-    <p class="shelf-note">추모 섬에서 리캡을 보고 마음에 들면 저장해 보세요.<br>저장한 리캡만 이곳 책장에 꽂혀요.</p><button id="addAlbum" hidden></button>
+    <p class="shelf-note">나의 섬에서 리캡을 보고 마음에 들면 저장해 보세요.<br>저장한 리캡만 이곳 책장에 꽂혀요.</p><button id="addAlbum" hidden></button>
     <nav class="tabbar"></nav>
   </section>
 
@@ -295,15 +294,13 @@
   <!-- 19. 오늘의 쪽지 (감정 다이어리 + AI) -->
   <div class="dim2" id="dDim"></div>
   <div class="diary" id="diary">
-    <div class="handle"></div>
-    <div class="dy-head"><h3>오늘의 쪽지</h3><button class="icon-btn" id="dyX" aria-label="닫기"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3 3 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+    <div class="dy-head"><h3 id="ntT">오늘의 알림</h3><button class="icon-btn" id="dyX" aria-label="닫기"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3 3 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
     <div class="scroll dy-body">
       <div class="dy-card ai" id="dyAi"></div>
-      <div class="dy-card"><div class="dy-t">오늘 마음 한 줄</div>
-        <div class="dy-in"><input id="dyLine" maxlength="80" placeholder="지금 떠오르는 마음을 적어 보세요"><button id="dySave">남기기</button></div></div>
-      <div class="dy-card"><div class="dy-t">기념일 알림 미리 보기</div><div class="opts two" style="margin:0"><button class="opt" id="pvBday">🎂 만난 날 알림</button><button class="opt" id="pvStar">🕯 별이 된 날 알림</button></div></div>
-      <div class="dy-card"><div class="dy-t">나의 마음 기록</div><div class="dy-week" id="dyWeek"></div><div class="dy-stats" id="dyStats"></div><div class="dy-list" id="dyList"></div></div>
+      <div id="ntList"></div>
+      <div hidden><input id="dyLine"><button id="dySave"></button><button id="pvBday"></button><button id="pvStar"></button><div id="dyWeek"></div><div id="dyStats"></div><div id="dyList"></div></div>
     </div>
+    <div class="nt-foot"><button class="rough btn" id="ntMood">오늘의 마음 기록하기</button></div>
   </div>
 
   <!-- 20. 아이 등록 (4단계) -->
@@ -344,6 +341,11 @@
         <button class="rg-opt" data-w="star"><svg class="rg-ic" viewBox="0 0 64 64" fill="none" stroke="#5A3E3B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 48a24 24 0 0 1 48 0" stroke="#E9967A" stroke-width="4"/><path d="M15 48a17 17 0 0 1 34 0" stroke="#F3C77B" stroke-width="4"/><path d="M22 48a10 10 0 0 1 20 0" stroke="#A9C7E8" stroke-width="4"/><path d="M47 8l2.6 5.4 5.9.9-4.3 4.1 1 5.9L47 21.5l-5.2 2.8 1-5.9-4.3-4.1 5.9-.9z" fill="#FCE2C4"/></svg><b>무지개다리를 건넜어요.</b><small><span class="nm"></span><span class="ga"></span> 별이 된 날을 적어 두면,<br>그날 즈음 섬이 별빛으로 물들어요.</small></button>
         <div id="rgStarBox" hidden><div class="ymd" id="rgStar"></div></div>
       </div>
+      <div class="rg-s" data-s="5">
+        <div class="rg-arr" id="rgArr"><img src="/img/isl1.png" alt=""><div class="pet" id="rgArrPet"></div><span class="arr-tag nm"></span></div>
+        <h2 class="rg-q"><span class="hl nm"></span><span class="ga"></span> 나의 섬에 도착했어요.</h2>
+        <div class="rg-sum2" id="rgSum2"></div>
+      </div>
     </div>
     <div class="rg-popdim" id="rgPopDim"><div class="rg-pop" id="rgPop"><button class="x" id="rgPopX" aria-label="닫기">×</button>
           <b>공동 보호자로 초대받으셨나요?</b><p>아래 칸에 코드를 입력해주세요.</p>
@@ -364,18 +366,27 @@
   <!-- 22. 기념일 알림 -->
   <div class="anv" id="anv"><button class="anv-x" id="anvX">×</button><span class="anv-tag" id="anvTag"></span><h3 id="anvT"></h3><p id="anvD"></p><div class="anv-b"><button id="anvA"></button><button class="pr" id="anvB"></button></div></div>
 
-  <!-- 23. 추모 섬 리캡 플레이어 -->
+  <!-- 11. 아이 책장 -->
+  <section class="screen" id="petShelf">
+    <button class="back ps-back" data-back><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button>
+    <div class="ps-title"><svg class="scrib" viewBox="0 0 330 80" preserveAspectRatio="none"><g fill="none" stroke="#C9A595" stroke-linecap="round" opacity=".75"><path d="M40 18C110 2 250 4 300 22 C335 34 318 62 250 70 C170 79 60 76 26 58 C-2 43 18 22 70 14 C130 6 230 8 290 20" stroke-width="6"/><path d="M60 16C140 6 260 10 306 28 C326 40 300 64 220 72 C150 78 70 72 34 56" stroke-width="3"/></g></svg><h2 id="psT"></h2></div>
+    <div class="books" id="psBooks"></div>
+    <div class="floor"><svg viewBox="0 0 402 220" preserveAspectRatio="none"><g fill="none" stroke="#4A423C" stroke-width="1.3" stroke-linecap="round" opacity=".55"><path d="M0 12 Q30 9 48 13"/><path d="M360 40 q22 -6 42 0"/><path d="M262 110 q-20 4 -10 14 q22 6 46 -4 q8 -10 -12 -12 q-14 -2 -24 2"/><path d="M325 107 l8 -1"/><path d="M370 140 q18 2 32 -4"/><path d="M10 64 q6 2 4 8"/></g></svg></div>
+    <button class="rough ps-add" id="psAdd"><span>+</span> 앨범 추가하기</button>
+    <nav class="tabbar"></nav>
+  </section>
+
+  <!-- 23. 리캡 플레이어 -->
   <section class="screen" id="player">
-    <div class="pl-bg"></div>
-    <div class="pl-top"><button class="pb" data-back aria-label="뒤로">←</button><button class="pb" id="plSave" aria-label="저장"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#4A423C" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12"/></svg></button><button class="pb" id="plEdit" aria-label="리캡 고치기" style="background:#FDD9BD">✎</button><button class="pb stop" data-back>✕ 중단하기</button></div>
-    <h2 class="pl-t" id="plT"></h2><div class="pl-s" id="plS"></div>
-    <div class="pl-stage" id="plStage"><button class="pl-arr l" id="plPrev">◀</button><button class="pl-arr r" id="plNext">▶</button><button class="pl-bm" id="plBm">🔖</button></div>
+    <div class="pl-top"><button class="back" id="plBack"><svg viewBox="0 0 12 18"><path d="M10 2 3 9l7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>뒤로가기</button><button class="pl-stop" id="plStop">그만보기</button><button hidden id="plSave"></button><button hidden id="plEdit"></button></div>
+    <div class="pl-tw"><svg class="scrib" viewBox="0 0 330 80" preserveAspectRatio="none"><g fill="none" stroke="#C9A595" stroke-linecap="round" opacity=".75"><path d="M40 18C110 2 250 4 300 22 C335 34 318 62 250 70 C170 79 60 76 26 58 C-2 43 18 22 70 14 C130 6 230 8 290 20" stroke-width="6"/><path d="M60 16C140 6 260 10 306 28 C326 40 300 64 220 72 C150 78 70 72 34 56" stroke-width="3"/></g></svg><h2 id="plT"></h2></div><div class="pl-s" id="plS"></div>
+    <div class="pl-stage" id="plStage"><button class="pl-arr l" id="plPrev" aria-label="이전"></button><button class="pl-arr r" id="plNext" aria-label="다음"></button><button class="pl-bm" id="plBm" aria-label="좋아요"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 20.5s-7.5-4.6-9.3-9.3C1.4 7.7 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.6 3.2 4.3 6.7-1.8 4.7-9.3 9.3-9.3 9.3z" fill="currentColor"/></svg></button></div>
     <div class="pl-empty" id="plEmpty"><img src="/img/dachs.png" alt=""><b id="plEmT"></b><p>사진을 불러오면 바로 리캡으로 만들어 드려요.</p><label for="plFile" class="rough btn">사진 불러오기</label><input type="file" id="plFile" accept="image/*" multiple hidden></div>
     <div class="pl-dots" id="plDots"></div>
     <div class="pl-cap" id="plCap"></div>
-    <button class="pl-end" id="plEnd">감상 마치기</button>
-    <div class="pl-ctl"><button id="plPause"><i>❚❚</i><span>일시정지</span></button><button id="plSpeed">⇋ 흐림·속도</button></div>
-    <div class="pl-pop" id="plPop"><label class="soft-tg"><input type="checkbox" id="plSoft"><i></i><span>사진 흐리게</span></label><div class="sh-opts" id="plSp"></div></div>
+    <div class="pl-ctl"><button id="plPause"><i><svg viewBox="0 0 20 20" width="14" height="14"><path d="M6 4l10 6-10 6z" fill="currentColor"/></svg></i><span>다시 재생하기</span></button><button id="plSpeed"><i><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 8h12M4 16h16"/><circle cx="18" cy="8" r="2" fill="currentColor"/><circle cx="6" cy="16" r="2" fill="currentColor"/></svg></i><span>속도 조절</span></button></div>
+    <div class="pl-pop" id="plPop"><div class="sh-opts" id="plSp"></div></div>
+    <input type="checkbox" id="plSoft" hidden><button hidden id="plEnd"></button>
   </section>
   <div class="dim2" id="edDim"></div>
   <div class="diary" id="edit"><div class="handle"></div>

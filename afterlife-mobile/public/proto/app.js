@@ -325,7 +325,7 @@ $('dice').onclick=()=>{ const pr=pick(PET_PRESETS); const cols=['#FFFBF4','#F2D3
   dName='나만의 아이'; drawCustom();
 };
 $('charDone').onclick=()=>{
-  if(REG&&REG._custom){ REG.dog=JSON.parse(JSON.stringify(D)); REG._custom=false; back(); return; }
+  if(REG&&REG._custom){ REG.dog=JSON.parse(JSON.stringify(D)); REG._custom=false; back(); setTimeout(drawReg,60); return; }
   S.dog={s:JSON.parse(JSON.stringify(D)),n:dName};
   $('charMini').hidden=false; $('charMini').innerHTML=render(D,'mini');
   $('charTxt').innerHTML=`<span></span><small>눌러서 다시 꾸미기</small>`;
@@ -349,7 +349,7 @@ function toIsland(newPet,noMood){
   const cur=NAV[NAV.length-1];
   document.querySelectorAll('.screen').forEach(el=>{el.classList.remove('on','left');});
   $('island').classList.add('on'); NAV=['island']; setTimeout(()=>setIsle(1),0);
-  drawPets(newPet); if(noMood) setTimeout(()=>checkAnniv(),900); else openMood();
+  drawPets(newPet); setTimeout(syncMail,0); if(noMood) setTimeout(()=>checkAnniv(),900); else openMood();
   S.arrived=newPet;
 }
 function wa(w){const c=w.charCodeAt(w.length-1);if(c<0xAC00||c>0xD7A3)return '와';return (c-0xAC00)%28?'과':'와';}
@@ -361,7 +361,7 @@ function drawPets(newPet){
     const el=document.createElement('div'); el.className='pet'+(p===newPet?' arrive':'');
     el.style.left=(sp.x-size/2)+'px'; el.style.top=(sat+sp.b-size*232/240)+'px';
     el.innerHTML=render(p.dog,'isl'+i);
-    el.onclick=()=>{ el.classList.remove('hop','arrive'); void el.offsetWidth; el.classList.add('hop'); setTimeout(()=>openPlayer(p),380); return;
+    el.onclick=()=>{ el.classList.remove('hop','arrive'); void el.offsetWidth; el.classList.add('hop'); setTimeout(()=>openPetShelf(p),380); return;
       toast(p.met?`${p.name}${wa(p.name)} 함께한 지 ${daysSince(p.met).toLocaleString()}일째`:`${p.name}의 기록을 남겨보세요`); };
     el.addEventListener('animationend',e=>{ if(e.animationName!=='idle') el.classList.remove('hop','arrive'); });
     const tag=document.createElement('div'); tag.className='rough tag'; tag.textContent=p.name;
@@ -396,7 +396,7 @@ setTimeout(()=>setIsle(1),0);
 $('moodSave').onclick=()=>{ if(!MOOD)return; $('island').classList.remove('m-sun','m-rain','m-cloud','m-moon'); $('island').classList.add('m-'+MOOD); setBg(MOOD); PREV_MOOD=MOOD; S.moods.push({m:MOOD,d:new Date()}); AI_CACHE=null; closeMood(`${MTXT[MOOD]} 마음을 섬에 남겼어요`); };
 $('moodSkip').onclick=()=>{ setBg(PREV_MOOD||'base'); closeMood(); };
 $('moodBack').onclick=()=>{ setBg(PREV_MOOD||'base'); closeMood(' '); setTimeout(()=>{ $('toast').classList.remove('show'); },460);
-  const prev=S.pets.length?'form':'gallery'; NAV=['island']; go(prev); };
+};
 
 /* ---------- 리캡 ---------- */
 let RC=null;
@@ -442,10 +442,18 @@ $('rvShelf').onclick=()=>{ S.books.push(VIEW); openShelf(VIEW); toast(`'${VIEW.t
 
 /* ---------- 책장 ---------- */
 const BOOKC=['#F0A3A0','#A8C3DF','#F6E8D6','#C4D4A5','#FDD9BD'];
+let PS=null;
+function petAlbums(p){ const own=S.books.filter(b=>b.pet===p); const all={pet:p,title:'함께한 모든 순간',photos:(p.photos||[]).map(u=>({u,cap:''})),auto:true}; return (p.photos&&p.photos.length)||!own.length?[all,...own]:own; }
+function openPetShelf(p,fresh){ PS=p; $('psT').textContent=`${p.name}${JS.wa(p.name)}의 추억들`; if(NAV[NAV.length-1]!=='petShelf'){ if(NAV[NAV.length-1]==='island') go('petShelf'); else { showOnly('petShelf'); NAV=['island','petShelf']; } }
+  setTimeout(()=>{ const b=$('psBooks'); b.innerHTML=''; const H=b.clientHeight-10;
+    petAlbums(p).forEach((r,i)=>{ const h=Math.min([300,400,360,330,380][i%5],H*[.74,1,.9,.8,.95][i%5]); const w=r.title.length>7?82:76;
+      const el=div('rough book'+(r===fresh?' new':'')); el.style.cssText=`width:${w}px;height:${h}px;background:${BOOKC[i%BOOKC.length]};--pt:${Math.round(h*.18)}px`;
+      el.innerHTML='<i></i><i></i><span></span>'; el.querySelector('span').textContent=r.title; el.onclick=()=>openPlayer(p,r); b.appendChild(el); }); },30); }
+$('psAdd').onclick=()=>{ openAlbumNew(PS); AN.fromPet=true; };
 function openShelf(fresh){
   if(fresh!==true){ showOnly('shelf'); } else fresh=null; NAV=['island','shelf'];
   const b=$('books'); b.innerHTML='';
-  if(!S.books.length){ b.innerHTML='<div class="shelf-empty">아직 꽂힌 책이 없어요.<br>추모 섬에서 아이를 눌러 리캡을 보고,<br>마음에 드는 리캡을 저장해 보세요.</div>'; return; }
+  if(!S.books.length){ b.innerHTML='<div class="shelf-empty">아직 꽂힌 책이 없어요.<br>나의 섬에서 아이를 눌러 리캡을 보고,<br>마음에 드는 리캡을 저장해 보세요.</div>'; return; }
   S.books.forEach((r,i)=>{ const H=$('books').clientHeight-10; const h=Math.min([300,420,380,340,400][i%5],H*[.72,1,.9,.8,.95][i%5]); const w=r.title.length>6?82:Math.max(74,80);
     const el=div('rough book'+(r===fresh?' new':'')); el.style.cssText=`width:${w}px;height:${h}px;background:${BOOKC[i%BOOKC.length]};--pt:${Math.round(h*.22)}px`;
     el.innerHTML='<i></i><i></i><span></span>'; el.querySelector('span').textContent=r.title;
@@ -472,7 +480,7 @@ function _anSave(){ const t=$('anTitle').value.trim();
   if(!AN.sel.length){ toast('앨범에 담을 사진을 골라주세요'); return; }
   if(!t){ toast('앨범의 이름을 적어 주세요'); $('anTitle').focus(); return; }
   const r={pet:AN.pet,title:t,photos:AN.sel.map(i=>({u:S.photos[i],cap:''})),made:new Date()};
-  S.books.push(r); openShelf(r); toast(`'${t}' 앨범이 책장에 꽂혔어요`); };
+  S.books.push(r); if(AN.fromPet){ NAV.pop(); openPetShelf(AN.pet,r); $('albumNew').classList.remove('on','left'); $('petShelf').classList.add('on'); } else openShelf(r); toast(`'${t}' 앨범이 책장에 꽂혔어요`); };
 
 /* ---------- 앨범 보기 ---------- */
 let AV=null, avObs=null;
@@ -526,7 +534,7 @@ $('commSlide').onclick=()=>tabGo('comm');
 /* ---------- 탭바 ---------- */
 const TABS_=[['set','설정','GEAR'],
  ['comm','커뮤니티','<path fill="currentColor" d="M12 3.5c5 0 9 3.3 9 7.4s-4 7.4-9 7.4c-.9 0-1.8-.1-2.6-.3L5 20l1-3.6C4.2 15 3 13.1 3 10.9 3 6.8 7 3.5 12 3.5z"/><g fill="#FAF6F0"><circle cx="8.3" cy="11" r="1.3"/><circle cx="12" cy="11" r="1.3"/><circle cx="15.7" cy="11" r="1.3"/></g>'],
- ['isle','추모 섬','<g fill="currentColor"><ellipse cx="6" cy="10" rx="2.2" ry="2.8"/><ellipse cx="10" cy="6.3" rx="2.2" ry="2.9"/><ellipse cx="14.4" cy="6.3" rx="2.2" ry="2.9"/><ellipse cx="18.2" cy="10" rx="2.2" ry="2.8"/><path d="M12.1 11.2c2.6 0 5.6 3.8 5.6 6 0 1.9-1.5 2.6-3 2.6-1 0-1.7-.5-2.6-.5s-1.6.5-2.6.5c-1.5 0-3-.7-3-2.6 0-2.2 3-6 5.6-6z"/></g>'],
+ ['isle','나의 섬','<g fill="currentColor"><ellipse cx="6" cy="10" rx="2.2" ry="2.8"/><ellipse cx="10" cy="6.3" rx="2.2" ry="2.9"/><ellipse cx="14.4" cy="6.3" rx="2.2" ry="2.9"/><ellipse cx="18.2" cy="10" rx="2.2" ry="2.8"/><path d="M12.1 11.2c2.6 0 5.6 3.8 5.6 6 0 1.9-1.5 2.6-3 2.6-1 0-1.7-.5-2.6-.5s-1.6.5-2.6.5c-1.5 0-3-.7-3-2.6 0-2.2 3-6 5.6-6z"/></g>'],
  ['store','저장소','<path fill="currentColor" d="M3 6.5A2 2 0 0 1 5 4.5h4.2l2 2.2H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'],
  ['prof','프로필','<g fill="currentColor"><circle cx="12" cy="7.8" r="4.3"/><path d="M3.8 20.5c0-4.3 3.7-7.3 8.2-7.3s8.2 3 8.2 7.3z"/></g>']];
 const ICN={set:'gear',comm:'ic-comm',isle:'ic-paw',store:'ic-store',prof:'ic-prof'};
@@ -665,7 +673,7 @@ let SM='list';
 function drawSt(){
   const b=$('stBody'); const pet=S.pets[S.stPet||0];
   $('settings').classList.toggle('editing',SM==='edit'&&!!pet); $('stSave').onclick=null;
-  if(SM==='list'||!pet){ SM='list'; $('settings').classList.remove('editing'); b.innerHTML='<h2 class="st-title">추모 섬에 있는 동물들을<br>편집해 보세요.</h2><div class="pets-list" id="petsRow"></div><p class="sc-d" style="margin:10px 4px 0">아이 코드를 가족에게 보내면 공동 보호자로 함께 기록할 수 있어요.</p><div style="height:130px"></div>'; drawPetsRow(); b.scrollTop=0; return; }
+  if(SM==='list'||!pet){ SM='list'; $('settings').classList.remove('editing'); b.innerHTML='<h2 class="st-title">나의 섬에 있는 동물들을<br>편집해 보세요.</h2><div class="pets-list" id="petsRow"></div><p class="sc-d" style="margin:10px 4px 0">아이 코드를 가족에게 보내면 공동 보호자로 함께 기록할 수 있어요.</p><div style="height:130px"></div>'; drawPetsRow(); b.scrollTop=0; return; }
   const nm=pet.name, eul=(nm.charCodeAt(nm.length-1)-0xAC00)%28?'을':'를';
   b.innerHTML=`<div class="ed-who"><span class="av">${render(pet.dog,'edw')}</span><div><b class="pn"></b><button class="ed-info" id="stInfo">기본 정보 고치기 ›</button></div></div>
   <h2 class="st-title">기록을 어떻게<br>마주하고 싶으신가요?</h2>
@@ -827,7 +835,23 @@ function trimCanvas(cv){ const x=cv.getContext('2d'); const {width:w,height:h}=c
 /* ---------- 오늘의 쪽지: 감정 다이어리 + AI ---------- */
 S.moods=[]; S.stat={like:0,scrap:0,flower:0}; let AI_CACHE=null, aiNS=null;
 (async()=>{ try{ if(window.claude&&claude.use) aiNS=await claude.use('sample'); }catch(e){ aiNS=null; } })();
-function openDiary(){ $('dDim').classList.add('on'); $('diary').classList.add('on'); $('mailDot').style.display='none'; drawDiary(); if(!AI_CACHE) runAI(); else drawAI(AI_CACHE); }
+function notis(){ const t=new Date(), L=[]; const day=864e5;
+  const near=(d)=>{ if(!d) return null; const x=new Date(t.getFullYear(),d.getMonth(),d.getDate()); let df=Math.round((x-new Date(t.getFullYear(),t.getMonth(),t.getDate()))/day); if(df<-183)df+=365; if(df>183)df-=365; return Math.abs(df)<=7?df:null; };
+  const when=df=>df===0?'오늘':df>0?`${df}일 뒤`:`${-df}일 전`;
+  S.pets.forEach(p=>{ const n=p.name;
+    const sd=p.star&&p.star.date?new Date(p.star.date):null; const a=near(sd);
+    if(a!==null) L.push({ic:'⭐',t:`${when(a)}는 ${n}${JS.ga(n)} 별이 된 날이에요`,s:'함께한 순간들을 천천히 다시 꺼내 볼까요?',go:()=>{closeDiary();openPetShelf(p);}});
+    const b=near(p.met&&!p.yearOnly?new Date(p.met):null);
+    if(b!==null) L.push({ic:'🌱',t:`${when(b)}는 ${n}${JS.wa(n)} 처음 만난 날이에요`,s:'그날의 추억 모음을 먼저 보여 드릴게요.',go:()=>{closeDiary();openPetShelf(p);}}); });
+  const st=S.stat||{}; const r=(st.like||0)+(st.flower||0);
+  if(S.commMine||r) L.push({ic:'💬',t:'함께 기억하는 섬에서 마음이 도착했어요',s:'내가 남긴 글에 다른 보호자들이 공감을 남겼어요.',go:()=>{closeDiary();tabGo('comm');}});
+  return L; }
+function syncMail(){ const n=1+notis().length; const e=$('mailN'); if(!e) return; e.textContent=n; e.classList.toggle('on',!S.mailSeen); }
+function openDiary(){ $('dDim').classList.add('on'); $('diary').classList.add('on'); S.mailSeen=true; syncMail();
+  const L=notis(); $('ntT').textContent=`오늘의 알림 (${L.length+1})`; const box=$('ntList'); box.innerHTML='';
+  L.forEach(x=>{ const b=document.createElement('button'); b.className='nt-it'; b.innerHTML='<span class="ic"></span><span><b></b><small></small></span>'; b.querySelector('.ic').textContent=x.ic; b.querySelector('b').textContent=x.t; b.querySelector('small').textContent=x.s; b.onclick=x.go; box.appendChild(b); });
+  drawDiary(); if(!AI_CACHE) runAI(); else drawAI(AI_CACHE); }
+$('ntMood').onclick=()=>{ closeDiary(); if(NAV[NAV.length-1]!=='island') tabGo('isle'); setTimeout(openMood,200); };
 function closeDiary(){ $('dDim').classList.remove('on'); $('diary').classList.remove('on'); }
 $('dyX').onclick=closeDiary;
 $('pvBday').onclick=()=>{ if(!S.pets.length){toast('먼저 아이를 등록해 주세요');return;} closeDiary(); tabGo('isle'); setTimeout(()=>checkAnniv('bday'),500); };
@@ -888,14 +912,15 @@ function drawYMD(id,val){ const d=val?new Date(val):null; const now=new Date(); 
 function readYMD(id){ const [y,m,d]=[...$(id).querySelectorAll('select')].map(s=>s.value); if(!y) return null; return new Date(+y,m?+m-1:0,d?+d:1); }
 function drawReg(){
   document.querySelectorAll('.rg-s').forEach(e=>e.classList.toggle('on',+e.dataset.s===RS));
-  $('rgStep').textContent=`${RS} / 4`;
+  $('rgStep').textContent=`${Math.min(RS,4)} / 4`; $('reg').classList.toggle('done',RS===5);
   const n=REG.name||'아이'; document.querySelectorAll('#reg .nm').forEach(e=>e.textContent=n);
   ['eul','eun','ga','wa'].forEach(k=>document.querySelectorAll('#reg .'+k).forEach(e=>e.textContent=JS[k](n)));
   $('rgType').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.t===REG.type)); $('rgEtcBox').hidden=REG.type!=='etc';
   document.querySelectorAll('#reg .rg-opt').forEach(b=>b.classList.toggle('on',b.dataset.w===REG.where)); $('rgStarBox').hidden=REG.where!=='star';
   $('rgMood').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.m===REG.mood));
   const later={2:'기억이 나지 않아요.',3:'오늘은 건너뛸게요.'}[RS]; $('rgLater').style.display=later?'':'none'; if(later) $('rgLater').textContent=later;
-  $('rgNext').textContent={1:'저장하기',2:'다음으로 넘어가기',3:'오늘의 마음 기록하기',4:`${n}${JS.eul(n)} 섬에 데려가기`}[RS];
+  $('rgNext').textContent={1:'저장하기',2:'다음으로 넘어가기',3:'오늘의 마음 기록하기',4:`${n}${JS.eul(n)} 섬에 데려가기`,5:'나의 섬으로 가기'}[RS];
+  if(RS===5){ $('rgLater').style.display=''; $('rgLater').textContent=`${n}의 모습 꾸미기`; drawArrive(); }
   $('rgNext').disabled=(RS===1&&!$('rgName').value.trim())||(RS===3&&!REG.mood);
   $('rgBody').scrollTop=0;
 }
@@ -907,14 +932,20 @@ $('rgMood').querySelectorAll('button').forEach(b=>b.onclick=()=>{REG.mood=b.data
 $('rgPopX').onclick=()=>$('rgPopDim').classList.add('off'); $('rgPopDim').onclick=e=>{ if(e.target.id==='rgPopDim') $('rgPopDim').classList.add('off'); };
 $('rgCode').onkeydown=e=>{ if(e.key==='Enter') $('rgJoin').click(); };
 function regDog(){ if(REG.dog&&REG.dog.sp) return REG.dog; const br=(REG.breed||'').replace(/ /g,''); const t=REG.type==='cat'?'cat':'dog'; const hit=br&&PET_PRESETS.find(x=>x[1].replace(/ /g,'').includes(br)||br.includes(x[1].replace(/ /g,''))); const pool=PET_PRESETS.filter(x=>x[0]===t); return JSON.parse(JSON.stringify((hit||pool[t==='dog'?1:0])[2])); }
+function drawArrive(){ const dg=REG.dog||regDog(); REG.dog=dg; $('rgArrPet').innerHTML=render(dg,'rga');
+  const f=d=>d?`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`:'기억나지 않아요';
+  const ty=REG.type==='etc'?(REG.etc||'다른 친구'):{dog:'강아지',cat:'고양이'}[REG.type];
+  const rows=[['기본 정보',[REG.name,ty,REG.breed].filter(Boolean).join(' · ')],['처음 만난 날',f(REG.met)],['사진',`${(REG.photos||[]).length}장`]];
+  $('rgSum2').innerHTML=rows.map(()=>'<div><span></span><b></b></div>').join(''); [...$('rgSum2').children].forEach((d,i)=>{d.children[0].textContent=rows[i][0];d.children[1].textContent=rows[i][1];}); }
 function rgSkipMood(){ return !!REG._edit; }
 $('rgNext').onclick=()=>{ document.activeElement.blur&&document.activeElement.blur(); setTimeout(()=>{
   if(RS===1){ REG.name=$('rgName').value.trim(); if(!REG.name) return; REG.memo=$('rgMemo').value.trim(); REG.etc=$('rgEtc').value.trim(); REG.breed=$('rgBreed').value.trim(); }
   if(RS===2){ REG.met=readYMD('rgMet'); if(rgSkipMood()){ RS=4; drawReg(); return; } }
   if(RS===3&&!REG.mood) return;
-  if(RS===4){ REG.star=REG.where==='star'?{on:true,date:readYMD('rgStar'),letter:'',vis:'me'}:null; REG.dog=regDog(); finishReg(); return; }
+  if(RS===4){ REG.star=REG.where==='star'?{on:true,date:readYMD('rgStar'),letter:'',vis:'me'}:null; REG.dog=regDog(); if(REG._edit){ finishReg(); return; } }
+  if(RS===5){ finishReg(); return; }
   RS++; drawReg(); },30); };
-$('rgLater').onclick=()=>{ if(RS===2){ REG.met=null; RS=rgSkipMood()?4:3; } else if(RS===3){ REG.mood=null; setBg(PREV_MOOD||'base'); RS=4; } drawReg(); };
+$('rgLater').onclick=()=>{ if(RS===5){ D=JSON.parse(JSON.stringify(REG.dog)); tab='kind'; dName=REG.name; REG._custom=true; drawCustom(); go('custom'); return; } if(RS===2){ REG.met=null; RS=rgSkipMood()?4:3; } else if(RS===3){ REG.mood=null; setBg(PREV_MOOD||'base'); RS=4; } drawReg(); };
 $('rgBack').onclick=()=>{ if(RS>1){ RS=(RS===4&&rgSkipMood())?2:RS-1; drawReg(); } else back(); };
 $('rgJoin').onclick=()=>{ const c=$('rgCode').value.trim().toUpperCase(); if(!/^AL-[A-Z0-9]{4}$/.test(c)){ toast('AL-로 시작하는 아이 코드를 확인해 주세요'); return; }
   const mine=S.pets.find(p=>p.code===c); if(mine){ toast(`이미 함께하고 있는 ${mine.name}예요`); return; }
@@ -1016,27 +1047,32 @@ async function saveRecap(){ const cv=document.createElement('canvas'); await pai
 
 /* ---------- 추모 섬 리캡 플레이어 ---------- */
 let PL=null;
-function openPlayer(pet){ const ph=[...new Set(pet.photos&&pet.photos.length?pet.photos:S.photos)];
-  PL={pet,ph,i:0,play:true,sp:4,bm:new Set(),cap:{},title:''}; $('plT').textContent=`${pet.name}의 리캡`;
+function openPlayer(pet,alb){ alb=alb||null; const ph=alb?alb.photos.map(x=>x.u):[...new Set(pet.photos&&pet.photos.length?pet.photos:S.photos)];
+  PL={pet,ph,alb,i:0,play:true,sp:4,bm:new Set(),cap:{},title:alb?alb.title:''}; $('plT').textContent=alb?alb.title:`${pet.name}의 리캡`; plUi();
   const em=!ph.length; $('player').classList.toggle('empty',em); $('plEmT').textContent=`아직 ${pet.name}의 사진이 없어요`;
   if(em){ $('plStage').querySelectorAll('.pl-ph').forEach(e=>e.remove()); $('plS').textContent=''; $('plDots').innerHTML=''; $('plCap').textContent=''; go('player'); return; }
   $('plStage').querySelectorAll('.pl-ph').forEach(e=>e.remove());
   ph.forEach(u=>{ const d=div('pl-ph'); d.style.backgroundImage=`url("${u}")`; $('plStage').prepend(d); });
-  $('plSoft').checked=false; $('player').classList.remove('soft'); $('plPop').classList.remove('on'); go('player'); plShow(0); plTick(); }
+  $('plPop').classList.remove('on'); go('player'); plShow(0); plTick(); }
 $('plFile').onchange=e=>{ const u=[...e.target.files].map(x=>URL.createObjectURL(x)); e.target.value=''; if(!u.length||!PL) return;
-  const pet=PL.pet; pet.photos=(pet.photos||[]).concat(u); S.photos=S.photos.concat(u); NAV.pop(); openPlayer(pet); toast(`사진 ${u.length}장으로 리캡을 만들었어요`); };
+  const pet=PL.pet, al=PL.alb; pet.photos=(pet.photos||[]).concat(u); S.photos=S.photos.concat(u); if(al) al.photos=al.photos.concat(u.map(x=>({u:x,cap:''}))); NAV.pop(); openPlayer(pet,al); toast(`사진 ${u.length}장으로 리캡을 만들었어요`); };
 function plShow(i){ const n=PL.ph.length; PL.i=(i+n)%n; const els=[...$('plStage').querySelectorAll('.pl-ph')].reverse();
-  els.forEach((e,k)=>e.classList.toggle('on',k===PL.i)); $('plS').textContent=`${PL.pet.name} · ${PL.i+1} / ${n}`;
+  els.forEach((e,k)=>e.classList.toggle('on',k===PL.i)); $('plS').textContent=`${PL.i+1} / ${n}`;
   $('plDots').innerHTML=PL.ph.map((_,k)=>`<i class="${k===PL.i?'on':''}"></i>`).join(''); $('plBm').classList.toggle('on',PL.bm.has(PL.i));
   $('plCap').textContent=(PL.cap&&PL.cap[PL.ph[PL.i]])||''; }
 function plTick(){ clearTimeout(PL.t); if(PL.play) PL.t=setTimeout(()=>{ if(NAV[NAV.length-1]!=='player')return; if(PL.i===PL.ph.length-1){PL.play=false;plUi();return;} plShow(PL.i+1); plTick(); },PL.sp*1000); }
-function plUi(){ $('plPause').querySelector('i').textContent=PL.play?'❚❚':'▶'; $('plPause').querySelector('span').textContent=PL.play?'일시정지':'다시 재생'; }
+function plUi(){ $('plPause').querySelector('i').innerHTML=PL.play?'<svg viewBox="0 0 20 20" width="14" height="14"><path d="M5 4h3.5v12H5zM11.5 4H15v12h-3.5z" fill="currentColor"/></svg>':'<svg viewBox="0 0 20 20" width="14" height="14"><path d="M6 4l10 6-10 6z" fill="currentColor"/></svg>'; $('plPause').querySelector('span').textContent=PL.play?'일시정지':'다시 재생하기'; }
 $('plPrev').onclick=()=>{plShow(PL.i-1);plTick();}; $('plNext').onclick=()=>{plShow(PL.i+1);plTick();};
 $('plPause').onclick=()=>{ PL.play=!PL.play; if(PL.play&&PL.i===PL.ph.length-1) plShow(0); plUi(); plTick(); };
 $('plBm').onclick=()=>{ PL.bm.has(PL.i)?PL.bm.delete(PL.i):PL.bm.add(PL.i); plShow(PL.i); };
-$('plSpeed').onclick=()=>{ $('plPop').classList.toggle('on'); $('plSp').innerHTML=[[6,'천천히'],[4,'보통'],[2.5,'빠르게']].map(([v,t])=>`<button data-v="${v}" class="${PL.sp==v?'on':''}">${t}</button>`).join('');
-  $('plSp').querySelectorAll('button').forEach(b=>b.onclick=()=>{PL.sp=+b.dataset.v;$('plSpeed').click();$('plSpeed').click();plTick();}); };
-$('plSoft').onchange=e=>{ applyBlur(); $('player').classList.toggle('soft',e.target.checked); };
+let spT=null;
+function spHide(ms){ clearTimeout(spT); spT=setTimeout(()=>$('plPop').classList.remove('on'),ms); }
+$('plSpeed').onclick=()=>{ const on=$('plPop').classList.toggle('on'); $('plSp').innerHTML=[[6,'천천히'],[4,'보통'],[2.5,'빠르게']].map(([v,t])=>`<button data-v="${v}" class="${PL.sp==v?'on':''}">${t}</button>`).join('');
+  $('plSp').querySelectorAll('button').forEach(b=>b.onclick=()=>{ PL.sp=+b.dataset.v; $('plSp').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b)); plTick(); spHide(700); });
+  if(on) spHide(3500); };
+$('plBack').onclick=()=>{ clearTimeout(PL.t); back(); if(PS&&NAV[NAV.length-1]==='petShelf') openPetShelf(PS); };
+$('plStop').onclick=()=>{ clearTimeout(PL.t); tabGo('isle'); };
+
 $('plEnd').onclick=()=>{ clearTimeout(PL.t); back(); };
 function plRecap(){ const sel=PL.bm.size?[...PL.bm].sort((a,b)=>a-b).map(i=>PL.ph[i]):PL.ph;
   return {pet:PL.pet,title:PL.title||`${PL.pet.name}의 리캡`,photos:sel.map(u=>({u,cap:(PL.cap&&PL.cap[u])||''})),made:new Date(),_tmp:true}; }
