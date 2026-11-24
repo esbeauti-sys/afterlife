@@ -912,7 +912,7 @@ function drawYMD(id,val){ const d=val?new Date(val):null; const now=new Date(); 
 function readYMD(id){ const [y,m,d]=[...$(id).querySelectorAll('select')].map(s=>s.value); if(!y) return null; return new Date(+y,m?+m-1:0,d?+d:1); }
 function drawReg(){
   document.querySelectorAll('.rg-s').forEach(e=>e.classList.toggle('on',+e.dataset.s===RS));
-  $('rgStep').textContent=`${Math.min(RS,4)} / 4`; $('reg').classList.toggle('done',RS===5);
+  $('rgStep').textContent=`${{1:1,2:2,4:3,5:3}[RS]||1} / 3`; $('reg').classList.toggle('done',RS===5);
   const n=REG.name||'아이'; document.querySelectorAll('#reg .nm').forEach(e=>e.textContent=n);
   ['eul','eun','ga','wa'].forEach(k=>document.querySelectorAll('#reg .'+k).forEach(e=>e.textContent=JS[k](n)));
   $('rgType').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.t===REG.type)); $('rgEtcBox').hidden=REG.type!=='etc';
@@ -937,7 +937,7 @@ function drawArrive(){ const dg=REG.dog||regDog(); REG.dog=dg; $('rgArrPet').inn
   const ty=REG.type==='etc'?(REG.etc||'다른 친구'):{dog:'강아지',cat:'고양이'}[REG.type];
   const rows=[['기본 정보',[REG.name,ty,REG.breed].filter(Boolean).join(' · ')],['처음 만난 날',f(REG.met)],['사진',`${(REG.photos||[]).length}장`]];
   $('rgSum2').innerHTML=rows.map(()=>'<div><span></span><b></b></div>').join(''); [...$('rgSum2').children].forEach((d,i)=>{d.children[0].textContent=rows[i][0];d.children[1].textContent=rows[i][1];}); }
-function rgSkipMood(){ return !!REG._edit; }
+function rgSkipMood(){ return true; }
 $('rgNext').onclick=()=>{ document.activeElement.blur&&document.activeElement.blur(); setTimeout(()=>{
   if(RS===1){ REG.name=$('rgName').value.trim(); if(!REG.name) return; REG.memo=$('rgMemo').value.trim(); REG.etc=$('rgEtc').value.trim(); REG.breed=$('rgBreed').value.trim(); }
   if(RS===2){ REG.met=readYMD('rgMet'); if(rgSkipMood()){ RS=4; drawReg(); return; } }
@@ -956,7 +956,7 @@ function finishReg(){ const ed=REG._edit; const data={name:REG.name,type:REG.typ
   const pet=Object.assign({code:newCode()},data); S.pets.push(pet);
   const m=REG.mood; if(m){ MOOD=m; PREV_MOOD=m; S.moods.push({m,d:new Date()}); $('island').classList.remove('m-sun','m-rain','m-cloud','m-moon'); $('island').classList.add('m-'+m); setBg(m); }
   else if(pet.star&&pet.star.on){ setBg('moon'); }
-  toIsland(pet,true); if(m) setTimeout(()=>toast(`${MTXT[m]} 마음을 섬에 남겼어요`),700); }
+  toIsland(pet); }
 $('goReg').onclick=()=>openReg(); $('skipGal').onclick=()=>openReg();
 
 
